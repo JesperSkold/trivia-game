@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../app/store"
-import { fetchCategories } from "../../features/categorySlice"
+import { fetchCategories } from "../../features/gameSlice"
 import Category from "../Category"
 import { TriviaCategories, TriviaCategory } from "../../interface/category"
-import NestedCategory from "../NestedCategory"
 
 const CategoryList = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -12,9 +11,8 @@ const CategoryList = () => {
     multiCategory,
     singleCategory,
     multiCategoryTitle,
-    nestedCategories,
     loading,
-  } = useSelector((state: RootState) => state.categories)
+  } = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
     dispatch(fetchCategories())
@@ -24,20 +22,22 @@ const CategoryList = () => {
 
   return (
     <div>
-      {nestedCategories.length > 0 && 
-        nestedCategories.map((cat: TriviaCategory) => (
-          <Category key={cat.id} name={cat.name} id={cat.id} nested/>
-        )) }
-          <h1>Single Categories</h1>
-          {singleCategory.map((category) => (
-            <Category key={category.id} name={category.name} id={category.id} />
-          ))}
-          <h1>Multi Categories</h1>
-          {multiCategoryTitle.map((category) => (
-            <NestedCategory key={category} name={category} />
-          ))}      
+      <h1>General Categories</h1>
+      {singleCategory.map((category) => (
+        <Category key={category.id} name={category.name} id={category.id} />
+      ))}
+      {multiCategoryTitle.map((category) => (
+        <div key={category}>
+          <h1>{category}</h1>
+          {multiCategory?.map(
+            (cat: TriviaCategory) =>
+              cat.name.includes(category) && (
+                <Category key={cat.id} name={cat.name} id={cat.id} nested />
+              )
+          )}
+        </div>
+      ))}
     </div>
   )
 }
-
 export default CategoryList

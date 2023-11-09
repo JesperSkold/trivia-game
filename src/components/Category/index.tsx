@@ -1,12 +1,26 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../app/store'
+import React from "react"
+import { AppDispatch } from "../../app/store"
+import { useDispatch } from "react-redux"
+import { setCurrentCategory } from "../../features/gameSlice"
 
-const Category = ({name, id, nested}: {name: string, id: number, nested?: boolean }) => {
-  
+const Category = ({
+  name,
+  id,
+  nested,
+}: {
+  name: string
+  id?: number
+  nested?: boolean
+}) => {
+  const dispatch = useDispatch<AppDispatch>()
+
   return (
     <div>
-      {nested ? (<li>{ name.slice(name.indexOf(":")+2)}</li>) : (<li>{name}</li>)}
+      {nested ? (
+        <li onClick={() => dispatch(setCurrentCategory({name, id}))}>{name.slice(name.indexOf(":") + 2)}</li>
+      ) : (
+        <li onClick={() => dispatch(setCurrentCategory({name, id}))}>{name}</li>
+      )}
     </div>
   )
 }
