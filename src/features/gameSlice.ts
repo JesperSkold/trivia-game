@@ -32,7 +32,10 @@ interface InitState {
 
   currentGame: any
 
-  loading: "idle" | "pending" | "succeeded" | "rejected"
+  loadingCategories: "idle" | "pending" | "succeeded" | "rejected"
+  loadingQuestions: "idle" | "pending" | "succeeded" | "rejected"
+
+
 }
 
 const initialState: InitState = {
@@ -49,7 +52,8 @@ const initialState: InitState = {
 
   currentGame: [],
 
-  loading: "idle",
+  loadingCategories: "idle",
+  loadingQuestions: "idle"
 }
 
 export const gameSlice = createSlice({
@@ -80,6 +84,11 @@ export const gameSlice = createSlice({
     },
     restartGame: (state) => {
       state.step = 0
+    },
+    goBack: (state) => {
+      if (state.step > 0) {
+        state.step -= 1
+      }
     }
   },
   extraReducers: (builder) => {
@@ -101,18 +110,19 @@ export const gameSlice = createSlice({
       )
       state.multiCategoryTitle = [...new Set(category)]
 
-      state.loading = "succeeded"
+      state.loadingCategories = "succeeded"
     })
     builder.addCase(fetchGame.fulfilled, (state, action) => {
       if (action.payload.response_code === 0) {
         console.log(action.payload, "currentgame from slice");
         state.currentGame = action.payload.results
+        state.loadingQuestions = "succeeded"
       }
       
     })
   },
 })
 
-export const { setCurrentCategory, setDifficulty, setQuestions, startGame } = gameSlice.actions
+export const { setCurrentCategory, setDifficulty, setQuestions, setType, startGame, restartGame, goBack } = gameSlice.actions
 
 export default gameSlice.reducer

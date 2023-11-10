@@ -11,7 +11,6 @@ const CategoryList = () => {
     multiCategory,
     singleCategory,
     multiCategoryTitle,
-    loading,
   } = useSelector((state: RootState) => state.game)
 
   useEffect(() => {
