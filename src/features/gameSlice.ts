@@ -82,13 +82,17 @@ export const gameSlice = createSlice({
     startGame: (state) => {
       state.step = 2
     },
-    restartGame: (state) => {
+    resetGame: (state) => {
       state.step = 0
+      state.currentGame = []
     },
     goBack: (state) => {
       if (state.step > 0) {
         state.step -= 1
       }
+    },
+    emptyCurrentGame: (state) => {
+      state.currentGame = []  
     }
   },
   extraReducers: (builder) => {
@@ -123,6 +127,6 @@ export const gameSlice = createSlice({
   },
 })
 
-export const { setCurrentCategory, setDifficulty, setQuestions, setType, startGame, restartGame, goBack } = gameSlice.actions
+export const { setCurrentCategory, setDifficulty, setQuestions, setType, startGame, resetGame, goBack, emptyCurrentGame } = gameSlice.actions
 
 export default gameSlice.reducer

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../app/store"
-import { fetchGame, restartGame } from "../../features/gameSlice"
-import he from 'he'
+import { fetchGame, resetGame, emptyCurrentGame } from "../../features/gameSlice"
+import he from "he"
 import BackBtn from "../BackBtn"
+import styles from "./style.module.scss"
 
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -33,12 +34,12 @@ const Game = () => {
 
   useEffect(() => {
     if (currentGame.length > 0 && currentGame.length !== count) {
-        setAnswers(
-          [
-            ...currentGame[count]?.incorrect_answers,
-            currentGame[count]?.correct_answer,
-          ].sort((a, b) => 0.5 - Math.random())
-        )
+      setAnswers(
+        [
+          ...currentGame[count]?.incorrect_answers,
+          currentGame[count]?.correct_answer,
+        ].sort((a, b) => 0.5 - Math.random())
+      )
     }
     // if (currentGame.length === score) {
     //   setGameWon(true)
@@ -53,15 +54,17 @@ const Game = () => {
       setNWrongAnswers((prev) => prev + 1)
     }
   }
-  // useEffect(() => {
-  //   if (currentGame.length > 0 && loadingQuestions === "succeeded") {
-  //     setQuestion({
-  //       question: currentGame[count].question,
-  //       correct_answer: currentGame[count].correct_answer,
-  //     })
-  //   }
-  // }, [loadingQuestions])
-  // console.log(question, "QUESTION")
+
+  const restartGame = () => {
+    dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
+    dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+    setCount(0)
+    //save Score and wronganswersscore in lastGameStats
+    setScore(0)
+    setNWrongAnswers(0)
+    setAnswer('')
+  }
+
   console.log(currentGame, "currentgame")
 
   return (
@@ -85,6 +88,15 @@ const Game = () => {
                   handleAnswer(option)
                 }}
                 disabled={!!answer}
+                className={`
+                ${answer === option && styles.chosenAnswer}
+                  ${
+                    answer && option === currentGame[count]?.correct_answer
+                      ? styles.correctAnswer
+                      : answer &&
+                        option !== currentGame[count]?.correct_answer &&
+                        styles.wrongAnswer
+                  }`}
               >
                 {he.decode(option)}
               </button>
@@ -103,21 +115,18 @@ const Game = () => {
           )}
         </div>
       )}
-      {currentGame.length === count && count !== 0 &&
-        <>
+      {currentGame.length === count && count !== 0 && (
           <div>
             <div>
               <h1>
                 You answered {score}/{currentGame.length} questions correctly
               </h1>
-              {score === currentGame.length && !nWrongAnswers && (
-                <h1>Congratulations!!!</h1>
-              )}
+              {!nWrongAnswers && <h1>Congratulations!!!</h1>}
             </div>
-            <button onClick={() => dispatch(restartGame())}>Play again?</button>
+            <button onClick={() => restartGame()}>Restart Game with the Same Settings</button>
+            <button onClick={() => dispatch(resetGame())}>Change Category and Settings</button>
           </div>
-        </>
-      }
+      )}
     </>
   )
 }
