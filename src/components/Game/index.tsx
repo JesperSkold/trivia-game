@@ -80,6 +80,7 @@ const Game = () => {
               You have {nWrongAnswers} wrong answer{nWrongAnswers > 1 && "s"}
             </h2>
           )}
+          <h2>Question {count+1}/{currentGame.length}</h2>
           {answers.length > 0 &&
             answers.map((option: string) => (
               <button
