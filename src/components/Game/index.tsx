@@ -16,17 +16,11 @@ const Game = () => {
     type,
     loadingQuestions,
   } = useSelector((state: RootState) => state.game)
-  // const [question, setQuestion] = useState<{
-  //   question: string | undefined
-  //   correct_answer: string | undefined
-  // }>({ question: undefined, correct_answer: undefined })
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
   const [answer, setAnswer] = useState<string>("")
   const [answers, setAnswers] = useState<any>([])
-  // const [gameWon, setGameWon] = useState<boolean>(false)
-  // const [gameOver, setGameOver] = useState<boolean>(false) //could eventually add this to gameSlice and let user pick for themselves
 
   useEffect(() => {
     if (!currentGame.length) {
@@ -43,9 +37,6 @@ const Game = () => {
         ].sort((a, b) => 0.5 - Math.random())
       )
     }
-    // if (currentGame.length === score) {
-    //   setGameWon(true)
-    // }
   }, [currentGame, count])
 
   const handleAnswer = (option: string) => {
