@@ -29,10 +29,8 @@ const Game = () => {
   // const [gameOver, setGameOver] = useState<boolean>(false) //could eventually add this to gameSlice and let user pick for themselves
 
   useEffect(() => {
-    console.log("outside");
     if (!currentGame.length) {
       dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
-      console.log("inside");
     }
   }, [dispatch])
 
