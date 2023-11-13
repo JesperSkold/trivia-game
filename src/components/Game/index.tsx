@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../app/store"
-import { fetchGame, resetGame, emptyCurrentGame } from "../../features/gameSlice"
+import { fetchGame, resetGame, emptyCurrentGame, fetchQuickGame } from "../../features/gameSlice"
 import he from "he"
 import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
@@ -29,7 +29,11 @@ const Game = () => {
   // const [gameOver, setGameOver] = useState<boolean>(false) //could eventually add this to gameSlice and let user pick for themselves
 
   useEffect(() => {
-    dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+    console.log("outside");
+    if (!currentGame.length) {
+      dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+      console.log("inside");
+    }
   }, [dispatch])
 
   useEffect(() => {
@@ -57,7 +61,7 @@ const Game = () => {
 
   const restartGame = () => {
     dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
-    dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+    currentCategory?.name ? dispatch(fetchGame({ currentCategory, difficulty, questions, type })) : dispatch(fetchQuickGame())
     setCount(0)
     //save Score and wronganswersscore in lastGameStats
     setScore(0)

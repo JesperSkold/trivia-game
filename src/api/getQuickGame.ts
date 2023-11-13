@@ -1,0 +1,1 @@
+export const getQuickGame = async() => (await fetch("https://opentdb.com/api.php?amount=10")).json()

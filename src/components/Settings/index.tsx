@@ -15,7 +15,6 @@ const Settings = () => {
     (state: RootState) => state.game
   )
   const [nQuestions, setNQuestions] = useState<string | number>(questions)
-console.log(type, "TYPEN");
 
   const numberHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const cleanedValue = e.target.value.replace(/[^0-9e+-]/g, "")

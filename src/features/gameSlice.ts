@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getCategories } from "../api/getCategories"
 import { getGame } from "../api/getGame"
 import { TriviaCategory, TriviaCategories } from "../interface/category"
+import { getQuickGame } from "../api/getQuickGame"
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
@@ -12,9 +13,13 @@ export const fetchCategories = createAsyncThunk(
 export const fetchGame = createAsyncThunk(
   "game/fetchGame",
   async (settings: any) => {
-    console.log(settings, "yo");
-    
     return await getGame(settings)
+  }
+)
+export const fetchQuickGame = createAsyncThunk(
+  "game/fetchQuickGame",
+  async () => {
+    return await getQuickGame()
   }
 )
 
@@ -34,8 +39,6 @@ interface InitState {
 
   loadingCategories: "idle" | "pending" | "succeeded" | "rejected"
   loadingQuestions: "idle" | "pending" | "succeeded" | "rejected"
-
-
 }
 
 const initialState: InitState = {
@@ -53,7 +56,7 @@ const initialState: InitState = {
   currentGame: [],
 
   loadingCategories: "idle",
-  loadingQuestions: "idle"
+  loadingQuestions: "idle",
 }
 
 export const gameSlice = createSlice({
@@ -67,17 +70,15 @@ export const gameSlice = createSlice({
     },
     setDifficulty: (state, action) => {
       state.difficulty = action.payload
-      console.log(state.difficulty);
-      
+      console.log(state.difficulty)
     },
     setQuestions: (state, action) => {
       state.questions = action.payload
-      console.log(state.questions);
-      
+      console.log(state.questions)
     },
     setType: (state, action) => {
       state.type = action.payload
-      console.log(state.type);
+      console.log(state.type)
     },
     startGame: (state) => {
       state.step = 2
@@ -88,12 +89,17 @@ export const gameSlice = createSlice({
     },
     goBack: (state) => {
       if (state.step > 0) {
-        state.step -= 1
+        state.currentGame = []
+        if (state.currentCategory.name) {
+          state.step -= 1
+        } else {
+          state.step = 0
+        }
       }
     },
     emptyCurrentGame: (state) => {
-      state.currentGame = []  
-    }
+      state.currentGame = []
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
@@ -118,15 +124,30 @@ export const gameSlice = createSlice({
     })
     builder.addCase(fetchGame.fulfilled, (state, action) => {
       if (action.payload.response_code === 0) {
-        console.log(action.payload, "currentgame from slice");
+        console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
         state.loadingQuestions = "succeeded"
       }
-      
+    })
+
+    builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
+      state.currentCategory.name = ""
+      state.currentGame = action.payload.results
+      state.step = 2
+      console.log(action.payload, "quick game")
     })
   },
 })
 
-export const { setCurrentCategory, setDifficulty, setQuestions, setType, startGame, resetGame, goBack, emptyCurrentGame } = gameSlice.actions
+export const {
+  setCurrentCategory,
+  setDifficulty,
+  setQuestions,
+  setType,
+  startGame,
+  resetGame,
+  goBack,
+  emptyCurrentGame,
+} = gameSlice.actions
 
 export default gameSlice.reducer
