@@ -1,7 +1,8 @@
 import React from "react"
-import { AppDispatch } from "../../app/store"
+import { AppDispatch } from "../../store/store"
 import { useDispatch } from "react-redux"
 import { setCurrentCategory } from "../../features/gameSlice"
+import styles from "./style.module.scss"
 
 const Category = ({
   name,
@@ -15,13 +16,13 @@ const Category = ({
   const dispatch = useDispatch<AppDispatch>()
 
   return (
-    <div>
+    <>
       {nested ? (
-        <li onClick={() => dispatch(setCurrentCategory({name, id}))}>{name.slice(name.indexOf(":") + 2)}</li>
+        <button className={styles.category} onClick={() => dispatch(setCurrentCategory({name, id}))}>{name.slice(name.indexOf(":") + 2)}</button>
       ) : (
-        <li onClick={() => dispatch(setCurrentCategory({name, id}))}>{name}</li>
+        <button className={styles.category} onClick={() => dispatch(setCurrentCategory({name, id}))}>{name}</button>
       )}
-    </div>
+    </>
   )
 }
 

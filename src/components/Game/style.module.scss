@@ -1,11 +1,41 @@
-.correctAnswer {
-background-color: green;
+.gameContainer {
+  h1{
+    text-align: center;
+  }
+  display: flex;
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    button {
+      border-radius: 20px;
+      width: 220px;
+      height: 50px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+
+    .correctAnswer {
+      background-color: green;
+      }
+      
+      .wrongAnswer {
+      background-color: red;
+      }
+      
+      .chosenAnswer {
+        border: 4px solid black !important;
+      }
+  }
 }
 
-.wrongAnswer {
-background-color: red;
-}
-
-.chosenAnswer {
-  border: 4px solid black;
+.meta {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  h2 {
+    margin-bottom: 0;
+  }
 }

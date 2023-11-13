@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../../app/store"
+import { AppDispatch, RootState } from "../../store/store"
 import { fetchGame, resetGame, emptyCurrentGame, fetchQuickGame } from "../../features/gameSlice"
 import he from "he"
 import BackBtn from "../BackBtn"
@@ -61,19 +61,13 @@ const Game = () => {
   console.log(currentGame, "currentgame")
 
   return (
-    <>
+    <div className={styles.gameContainer}>
       <BackBtn />
       {currentGame.length > 0 && currentGame.length !== count && (
         <div>
           <h1>{he.decode(currentGame[count]?.question)}</h1>
-          <h1>{currentGame[count]?.correct_answer}</h1>
-          <h1>Score: {score}</h1>
-          {nWrongAnswers > 0 && (
-            <h2>
-              You have {nWrongAnswers} wrong answer{nWrongAnswers > 1 && "s"}
-            </h2>
-          )}
-          <h2>Question {count+1}/{currentGame.length}</h2>
+          {/* <h1>{currentGame[count]?.correct_answer}</h1> */}
+          <div className={styles.answers}>
           {answers.length > 0 &&
             answers.map((option: string) => (
               <button
@@ -107,6 +101,14 @@ const Game = () => {
                 : "Next Question"}
             </button>
           )}
+          </div>
+          <section className={styles.meta}>
+          <h2>Correct Answer{score !== 1 && "s"}: {score}</h2>
+            <h2>
+              Wrong Answer{nWrongAnswers !== 1 && "s"}: {nWrongAnswers}
+            </h2>
+          <h2>Question {count+1}/{currentGame.length}</h2>
+            </section>
         </div>
       )}
       {currentGame.length === count && count !== 0 && (
@@ -121,7 +123,7 @@ const Game = () => {
             <button onClick={() => dispatch(resetGame())}>Change Category and Settings</button>
           </div>
       )}
-    </>
+    </div>
   )
 }
 
