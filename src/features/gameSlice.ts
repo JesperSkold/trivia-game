@@ -23,6 +23,8 @@ export const fetchQuickGame = createAsyncThunk(
   }
 )
 
+type LoadingState = "idle" | "pending" | "succeeded" | "rejected"
+
 interface InitState {
   allCategories: TriviaCategories
   singleCategory: TriviaCategory[]
@@ -37,8 +39,9 @@ interface InitState {
 
   currentGame: any
 
-  loadingCategories: "idle" | "pending" | "succeeded" | "rejected"
-  loadingQuestions: "idle" | "pending" | "succeeded" | "rejected"
+  loadingCategories: LoadingState
+  loadingCustomGame: LoadingState
+  loadingQuickGame: LoadingState
 }
 
 const initialState: InitState = {
@@ -56,7 +59,8 @@ const initialState: InitState = {
   currentGame: [],
 
   loadingCategories: "idle",
-  loadingQuestions: "idle",
+  loadingCustomGame: "idle",
+  loadingQuickGame: "idle"
 }
 
 export const gameSlice = createSlice({
@@ -102,6 +106,17 @@ export const gameSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchCategories.pending, (state) => {
+      state.loadingCategories = "pending"
+    })
+    builder.addCase(fetchQuickGame.pending, (state) => {
+      state.loadingQuickGame = "pending"
+    })
+    builder.addCase(fetchGame.pending, (state) => {
+      console.log("YTAHHOOO");
+      
+      state.loadingCustomGame = "pending"
+    })
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
       state.allCategories = action.payload
       const multi: TriviaCategory[] = []
@@ -126,7 +141,7 @@ export const gameSlice = createSlice({
       if (action.payload.response_code === 0) {
         console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
-        state.loadingQuestions = "succeeded"
+        state.loadingCustomGame = "succeeded"
       }
     })
 
@@ -134,7 +149,7 @@ export const gameSlice = createSlice({
       state.currentCategory.name = ""
       state.currentGame = action.payload.results
       state.step = 2
-      console.log(action.payload, "quick game")
+      state.loadingQuickGame = "succeeded"
     })
   },
 })

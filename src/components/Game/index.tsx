@@ -14,7 +14,7 @@ const Game = () => {
     difficulty,
     questions,
     type,
-    loadingQuestions,
+    loadingCustomGame
   } = useSelector((state: RootState) => state.game)
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
@@ -112,15 +112,15 @@ const Game = () => {
         </div>
       )}
       {currentGame.length === count && count !== 0 && (
-          <div>
-            <div>
+          <div className={styles.endGame}>
               <h1>
                 You answered {score}/{currentGame.length} questions correctly
               </h1>
               {!nWrongAnswers && <h1>Congratulations!!!</h1>}
-            </div>
+              <div>
             <button onClick={() => restartGame()}>Restart Game with the Same Settings</button>
             <button onClick={() => dispatch(resetGame())}>Change Category and Settings</button>
+            </div>
           </div>
       )}
     </div>

@@ -8,7 +8,7 @@ import {
   startGame,
 } from "../../features/gameSlice"
 import BackBtn from "../BackBtn"
-import styles from './style.module.scss'
+import styles from "./style.module.scss"
 
 const Settings = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -29,43 +29,45 @@ const Settings = () => {
   }
   return (
     <div className={styles.settingsContainer}>
-      <BackBtn />
-      <h1>Settings</h1>
-      <div>
-      <label>Number of questions (1-50)</label>
-      <input
-        onChange={numberHandler}
-        type="number"
-        min="1"
-        max="50"
-        value={nQuestions}
-        onKeyDown={(e) =>
-          ["e", "E", "+", "-", ".", ","].includes(e.key) && e.preventDefault()
-        }
-      />
+      <div className={styles.titleContainer}>
+        <BackBtn />
+        <h1>Settings</h1>
       </div>
       <div>
-      <label>Difficulty</label>
-      <select
-        onChange={(e) => dispatch(setDifficulty(e.target.value))}
-        defaultValue={difficulty}
-      >
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select>
+        <label>Number of questions (1-50)</label>
+        <input
+          onChange={numberHandler}
+          type="number"
+          min="1"
+          max="50"
+          value={nQuestions}
+          onKeyDown={(e) =>
+            ["e", "E", "+", "-", ".", ","].includes(e.key) && e.preventDefault()
+          }
+        />
       </div>
       <div>
-      <label>Type</label>
-      <select
-        onChange={(e) => dispatch(setType(e.target.value))}
-        defaultValue={type}
-      >
-        <option value="multiple">Multiple Choice</option>
-        <option value="boolean">True or False</option>
-      </select>
+        <label>Difficulty</label>
+        <select
+          onChange={(e) => dispatch(setDifficulty(e.target.value))}
+          defaultValue={difficulty}
+        >
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
       </div>
-      <button onClick={() => dispatch(startGame())}>Start Game!</button>
+      <div>
+        <label>Type</label>
+        <select
+          onChange={(e) => dispatch(setType(e.target.value))}
+          defaultValue={type}
+        >
+          <option value="multiple">Multiple Choice</option>
+          <option value="boolean">True or False</option>
+        </select>
+      </div>
+      {<button onClick={() => dispatch(startGame())}>Start Game!</button>}
     </div>
   )
 }
