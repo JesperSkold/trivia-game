@@ -1,10 +1,30 @@
 .gameContainer {
+  position: relative;
+  background-color: #427d9d;
+  padding: 32px;
+  max-width: 700px;
+  min-height: 420px;
+  border-radius: 16px;
   display: flex;
+  flex-direction: column;
   h1 {
     text-align: center;
     margin-top: 0;
   }
+  h2 {
+    margin: 0;
+  }
+  .questionCounter {
+    display: flex;
+    justify-content: end;
+  }
+
+  .border {
+    border-top: 1px solid #9BBEC8;
+    margin: 8px -32px;
+  }
   .answers {
+
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
@@ -18,33 +38,41 @@
     }
 
     .correctAnswer {
-      background-color: green;
+      color: black;
+      border: 4px solid rgba(9, 207, 9, 0.9);
     }
 
     .wrongAnswer {
-      background-color: red;
+      color: hsl(0deg 0% 76.0784313725%);
     }
 
-    .chosenAnswer {
-      border: 4px solid black !important;
+    .chosenWrongAnswer {
+      border: 4px solid rgb(170, 6, 6);
+      color: black;
+    }
+  }
+
+  .answersMeta {
+    margin-top: auto;
+    h2 {
+      margin: 0;
     }
   }
 }
 
-.meta {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  h2 {
-    margin-bottom: 0;
-  }
+.counter {
+ position: absolute;
+ bottom: 32px;
+ right: 32px;
 }
 
 .endGame {
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  text-align: center;
   div {
     display: flex;
     flex-wrap: wrap;

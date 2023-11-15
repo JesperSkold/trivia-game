@@ -33,7 +33,7 @@ const CategoryList = () => {
         <>
           <h3>To start playing, press the quick play button:</h3>
           {loadingQuickGame === "pending" ? (
-              <Loader />
+            <Loader />
           ) : (
             <button
               className={styles.quickPlayBtn}

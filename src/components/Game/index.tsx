@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
-import { fetchGame, resetGame, emptyCurrentGame, fetchQuickGame } from "../../features/gameSlice"
+import {
+  fetchGame,
+  resetGame,
+  emptyCurrentGame,
+  fetchQuickGame,
+} from "../../features/gameSlice"
 import he from "he"
 import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
@@ -14,7 +19,7 @@ const Game = () => {
     difficulty,
     questions,
     type,
-    loadingCustomGame
+    loadingCustomGame,
   } = useSelector((state: RootState) => state.game)
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
@@ -50,34 +55,42 @@ const Game = () => {
 
   const restartGame = () => {
     dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
-    currentCategory?.name ? dispatch(fetchGame({ currentCategory, difficulty, questions, type })) : dispatch(fetchQuickGame())
+    currentCategory?.name
+      ? dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+      : dispatch(fetchQuickGame())
     setCount(0)
-    //save Score and wronganswersscore in lastGameStats
     setScore(0)
     setNWrongAnswers(0)
-    setAnswer('')
+    setAnswer("")
   }
 
-  console.log(currentGame, "currentgame")
-
   return (
-    <div className={styles.gameContainer}>
-      <BackBtn />
+    <div>
       {currentGame.length > 0 && currentGame.length !== count && (
-        <div>
+        <div className={styles.gameContainer}>
+          <BackBtn />
+          <div className={styles.questionCounter}>
+            <h2>
+              {count + 1}/{currentGame.length}
+            </h2>
+          </div>
+          <div className={styles.border}></div>
           <h1>{he.decode(currentGame[count]?.question)}</h1>
-          {/* <h1>{currentGame[count]?.correct_answer}</h1> */}
           <div className={styles.answers}>
-          {answers.length > 0 &&
-            answers.map((option: string) => (
-              <button
-                key={option}
-                onClick={() => {
-                  handleAnswer(option)
-                }}
-                disabled={!!answer}
-                className={`
-                ${answer === option && styles.chosenAnswer}
+            {answers.length > 0 &&
+              answers.map((option: string) => (
+                <button
+                  key={option}
+                  onClick={() => {
+                    handleAnswer(option)
+                  }}
+                  disabled={!!answer}
+                  className={`
+                ${
+                  answer === option &&
+                  option !== currentGame[count]?.correct_answer &&
+                  styles.chosenWrongAnswer
+                }
                   ${
                     answer && option === currentGame[count]?.correct_answer
                       ? styles.correctAnswer
@@ -85,43 +98,50 @@ const Game = () => {
                         option !== currentGame[count]?.correct_answer &&
                         styles.wrongAnswer
                   }`}
+                >
+                  {he.decode(option)}
+                </button>
+              ))}
+            {answer && (
+              <button
+                onClick={() => {
+                  setCount((prev) => prev + 1)
+                  setAnswer("")
+                }}
               >
-                {he.decode(option)}
+                {currentGame.length - 1 === count
+                  ? "Finish Game"
+                  : "Next Question"}
               </button>
-            ))}
-          {answer && (
-            <button
-              onClick={() => {
-                setCount((prev) => prev + 1)
-                setAnswer("")
-              }}
-            >
-              {currentGame.length - 1 === count
-                ? "Finish Game"
-                : "Next Question"}
-            </button>
-          )}
+            )}
           </div>
-          <section className={styles.meta}>
-          <h2>Correct Answer{score !== 1 && "s"}: {score}</h2>
+          <section className={styles.answersMeta}>
+          <div className={styles.border}></div>
+            <h2>
+              Correct Answer{score !== 1 && "s"}: {score}
+            </h2>
             <h2>
               Wrong Answer{nWrongAnswers !== 1 && "s"}: {nWrongAnswers}
             </h2>
-          <h2>Question {count+1}/{currentGame.length}</h2>
-            </section>
+          </section>
+          <h2 className={styles.counter}>30</h2>
         </div>
       )}
       {currentGame.length === count && count !== 0 && (
-          <div className={styles.endGame}>
-              <h1>
-                You answered {score}/{currentGame.length} questions correctly
-              </h1>
-              {!nWrongAnswers && <h1>Congratulations!!!</h1>}
-              <div>
-            <button onClick={() => restartGame()}>Restart Game with the Same Settings</button>
-            <button onClick={() => dispatch(resetGame())}>Change Category and Settings</button>
-            </div>
+        <div className={styles.endGame}>
+          <h1>
+            You answered {score}/{currentGame.length} questions correctly
+          </h1>
+          {!nWrongAnswers && <h1>Congratulations!!!</h1>}
+          <div>
+            <button onClick={() => restartGame()}>
+              Restart Game with the Same Settings
+            </button>
+            <button onClick={() => dispatch(resetGame())}>
+              Change Category and Settings
+            </button>
           </div>
+        </div>
       )}
     </div>
   )
