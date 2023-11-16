@@ -60,13 +60,20 @@
     }
 
     .wrongAnswer {
-      color: hsl(0deg 0% 76.0784313725%);
+      color: hsl(0deg 0% 60%);
     }
 
     .chosenWrongAnswer {
       border: 4px solid rgb(170, 6, 6);
       color: black;
     }
+  }
+  .timesUp {
+    color: rgb(170, 6, 6);
+  }
+
+  .timesAlmostUp {
+    color:  rgba(170, 6, 6, 0.5);
   }
 
   .answersMeta {
