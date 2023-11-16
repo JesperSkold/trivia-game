@@ -37,14 +37,18 @@ const Game = () => {
 
   useEffect(() => {
     if (currentGame.length > 0 && currentGame.length !== count) {
-      setAnswers(
-        [
-          ...currentGame[count]?.incorrect_answers,
-          currentGame[count]?.correct_answer,
-        ].sort((a, b) => 0.5 - Math.random())
-      )
+      const mergedArr = [
+        ...currentGame[count]?.incorrect_answers,
+        currentGame[count]?.correct_answer,
+      ]
+      if (mergedArr.find((elem) => elem === "True")) {
+        setAnswers(mergedArr.sort().reverse())
+      } else {
+        setAnswers(mergedArr.sort((a, b) => 0.5 - Math.random()))
+      }
     }
   }, [currentGame, count])
+  
 
   const handleAnswer = (option: string) => {
     setAnswer(option)
@@ -82,7 +86,7 @@ const Game = () => {
           <div className={styles.border}></div>
           <div className={styles.questionContainer}>
             <div className={styles.question}>
-            <h1>{he.decode(currentGame[count]?.question)}</h1>
+              <h1>{he.decode(currentGame[count]?.question)}</h1>
             </div>
             <div className={styles.answers}>
               {answers.length > 0 &&
