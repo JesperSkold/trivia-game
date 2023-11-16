@@ -10,75 +10,19 @@ export const fetchCategories = createAsyncThunk(
     return await getCategories()
   }
 )
-// export const fetchGame = createAsyncThunk(
-//   "game/fetchGame",
-//   async (settings: any) => {
-//     return await getGame(settings)
-//   }
-// )
-// export const fetchQuickGame = createAsyncThunk(
-//   "game/fetchQuickGame",
-//   async () => {
-//     return await getQuickGame()
-//   }
-// )
-// Mock data structure similar to actual API response
-const mockGameResponse = [
-  {
-    question: "What is 2+2?",
-    correct_answer: "4",
-    incorrect_answers: ["3", "5", "6"]
-  },
-  {
-    question: "Who is the president of the USA?",
-    correct_answer: "Joe Biden",
-    incorrect_answers: ["Donald Trump", "Barack Obama", "George Washington"]
-  },
-  // Add more mock questions as needed
-];
-
-const mockQuickGameResponse = [
-  {
-    question: "What is the capital of France?",
-    correct_answer: "Paris",
-    incorrect_answers: ["London", "Berlin", "Rome"]
-  },
-  // Add more mock questions as needed
-];
-
-// ... (existing code)
-
 export const fetchGame = createAsyncThunk(
   "game/fetchGame",
   async (settings: any) => {
-    try {
-      // Simulating the API call with a delay
-      // You can replace this with actual API call when available
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return { results: mockGameResponse }; // Return mock data
-    } catch (error) {
-      // Handle error if needed
-      console.error("Error fetching game:", error);
-      throw error;
-    }
+    return await getGame(settings)
   }
-);
-
+)
 export const fetchQuickGame = createAsyncThunk(
   "game/fetchQuickGame",
   async () => {
-    try {
-      // Simulating the API call with a delay
-      // You can replace this with actual API call when available
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return { results: mockQuickGameResponse }; // Return mock data
-    } catch (error) {
-      // Handle error if needed
-      console.error("Error fetching quick game:", error);
-      throw error;
-    }
+    return await getQuickGame()
   }
-);
+)
+
 type LoadingState = "idle" | "pending" | "succeeded" | "rejected"
 
 interface InitState {
@@ -200,11 +144,11 @@ export const gameSlice = createSlice({
       state.loadingCategories = "succeeded"
     })
     builder.addCase(fetchGame.fulfilled, (state, action) => {
-      // if (action.payload.response_code === 0) {
+      if (action.payload.response_code === 0) {
         console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
         state.loadingCustomGame = "succeeded"
-      // }
+      }
     })
 
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {

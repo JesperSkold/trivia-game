@@ -30,9 +30,8 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <Game />
-      {/* {!apiError && renderStep(step)}
-      {apiError && <ApiError />} */}
+      {!apiError && renderStep(step)}
+      {apiError && <ApiError />}
     </div>
   )
 }

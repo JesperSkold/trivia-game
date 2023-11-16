@@ -2,17 +2,41 @@
   position: relative;
   background-color: #427d9d;
   padding: 32px;
-  max-width: 700px;
+  width: 700px;
   min-height: 420px;
   border-radius: 16px;
+  border: 3px solid #9BBEC8;
   display: flex;
   flex-direction: column;
+
   h1 {
     text-align: center;
     margin-top: 0;
   }
   h2 {
     margin: 0;
+  }
+
+  @media screen and (max-width: 700px) {
+    width: unset;
+    min-height: unset;
+  }
+
+
+  .questionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto 0;
+    .question {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      @media screen and (max-width: 700px) {
+       height: unset;
+       min-height: 130px;
+      }
+    }
   }
   .questionCounter {
     display: flex;
@@ -24,18 +48,10 @@
     margin: 8px -32px;
   }
   .answers {
-
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     justify-content: center;
-    button {
-      border-radius: 20px;
-      width: 240px;
-      height: 50px;
-      border: 1px solid black;
-      cursor: pointer;
-    }
 
     .correctAnswer {
       color: black;
@@ -58,6 +74,27 @@
       margin: 0;
     }
   }
+}
+
+button {
+  border-radius: 20px;
+  width: 240px;
+  height: 50px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.nextBtnPlaceholder {
+  height: 84px;
+}
+
+.nextBtn {
+margin-top: 34px;
+background-color: #164863;
+border: 1px solid #DDF2FD;
+color: white;
+height: 50px;
+width: 140px;
 }
 
 .counter {

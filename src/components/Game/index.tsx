@@ -10,6 +10,7 @@ import {
 import he from "he"
 import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
+import Loader from "../Loader"
 
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -20,6 +21,7 @@ const Game = () => {
     questions,
     type,
     loadingCustomGame,
+    loadingQuickGame,
   } = useSelector((state: RootState) => state.game)
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
@@ -66,6 +68,9 @@ const Game = () => {
 
   return (
     <div>
+      {(loadingCustomGame === "pending" || loadingQuickGame === "pending") && (
+        <Loader />
+      )}
       {currentGame.length > 0 && currentGame.length !== count && (
         <div className={styles.gameContainer}>
           <BackBtn />
@@ -75,17 +80,20 @@ const Game = () => {
             </h2>
           </div>
           <div className={styles.border}></div>
-          <h1>{he.decode(currentGame[count]?.question)}</h1>
-          <div className={styles.answers}>
-            {answers.length > 0 &&
-              answers.map((option: string) => (
-                <button
-                  key={option}
-                  onClick={() => {
-                    handleAnswer(option)
-                  }}
-                  disabled={!!answer}
-                  className={`
+          <div className={styles.questionContainer}>
+            <div className={styles.question}>
+            <h1>{he.decode(currentGame[count]?.question)}</h1>
+            </div>
+            <div className={styles.answers}>
+              {answers.length > 0 &&
+                answers.map((option: string) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      handleAnswer(option)
+                    }}
+                    disabled={!!answer}
+                    className={`
                 ${
                   answer === option &&
                   option !== currentGame[count]?.correct_answer &&
@@ -98,12 +106,15 @@ const Game = () => {
                         option !== currentGame[count]?.correct_answer &&
                         styles.wrongAnswer
                   }`}
-                >
-                  {he.decode(option)}
-                </button>
-              ))}
+                  >
+                    {he.decode(option)}
+                  </button>
+                ))}
+            </div>
+            {!answer && <div className={styles.nextBtnPlaceholder}></div>}
             {answer && (
               <button
+                className={styles.nextBtn}
                 onClick={() => {
                   setCount((prev) => prev + 1)
                   setAnswer("")
@@ -116,7 +127,7 @@ const Game = () => {
             )}
           </div>
           <section className={styles.answersMeta}>
-          <div className={styles.border}></div>
+            <div className={styles.border}></div>
             <h2>
               Correct Answer{score !== 1 && "s"}: {score}
             </h2>
