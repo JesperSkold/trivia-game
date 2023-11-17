@@ -86,7 +86,9 @@ const Game = () => {
   const restartGame = () => {
     dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
     currentCategory?.name
-      ? dispatch(fetchCusomGame({ currentCategory, difficulty, questions, type }))
+      ? dispatch(
+          fetchCusomGame({ currentCategory, difficulty, questions, type })
+        )
       : dispatch(fetchQuickGame())
     setCount(0)
     setScore(0)
@@ -103,7 +105,9 @@ const Game = () => {
         <div className={styles.gameContainer}>
           <div className={styles.header}>
             <BackBtn />
-              <h2 className={styles.categoryName}>{he.decode(currentGame[count]?.category)}</h2>
+            <h2 className={styles.categoryName}>
+              {he.decode(currentGame[count]?.category)}
+            </h2>
             <h2>
               {count + 1}/{currentGame.length}
             </h2>
@@ -164,22 +168,31 @@ const Game = () => {
           </div>
           <section className={styles.answersMeta}>
             <div className={styles.border}></div>
-            <h2>
-              Correct Answer{score !== 1 && "s"}: {score}
-            </h2>
-            <h2>
-              Wrong Answer{nWrongAnswers !== 1 && "s"}: {nWrongAnswers}
-            </h2>
+            <div className={styles.correctAnswerNDifficultyBox}>
+              <h2>
+                Correct Answer{score !== 1 && "s"}: {score}
+              </h2>
+              <h2>
+                Difficulty:{" "}
+                {currentGame[count]?.difficulty[0].toUpperCase() +
+                  currentGame[count]?.difficulty.slice(1)}
+              </h2>
+            </div>
+            <div className={styles.wrongAnswerNTimeBox}>
+              <h2>
+                Wrong Answer{nWrongAnswers !== 1 && "s"}: {nWrongAnswers}
+              </h2>
+              <h2
+                className={`${styles.counter} ${
+                  timer <= 15 && timer > 0
+                    ? styles.timesAlmostUp
+                    : timer <= 0 && styles.timesUp
+                }`}
+              >
+                {timer ? `Time Left: ${timer}` : "Time's up!"}
+              </h2>
+            </div>
           </section>
-          <h2
-            className={`${styles.counter} ${
-              timer <= 15 && timer > 0
-                ? styles.timesAlmostUp
-                : timer <= 0 && styles.timesUp
-            }`}
-          >
-            {timer ? timer : "Time's up!"}
-          </h2>
         </div>
       )}
       {currentGame?.length === count && count !== 0 && (

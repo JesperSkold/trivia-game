@@ -121,10 +121,14 @@ button {
   width: 140px;
 }
 
-.counter {
-  position: absolute;
-  bottom: 32px;
-  right: 32px;
+.correctAnswerNDifficultyBox{
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrongAnswerNTimeBox {
+  display: flex;
+  justify-content: space-between;
 }
 
 .endGame {

@@ -19,4 +19,7 @@
         font-size: 12px;
       }
   }
+  @media screen and (max-width: 400px) {
+    padding: 6px 16px;
+  }
 }
