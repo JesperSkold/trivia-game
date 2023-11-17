@@ -23,6 +23,7 @@ const Game = () => {
     loadingCustomGame,
     loadingQuickGame,
   } = useSelector((state: RootState) => state.game)
+  //rename these states
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
@@ -30,6 +31,7 @@ const Game = () => {
   const [answers, setAnswers] = useState<any>([])
   const [timesUp, setTimesup] = useState<boolean>(false)
   const [timer, setTimer] = useState<number>(30)
+  const [endGameStats, setEndGameStats] = useState<any>([])
 
   useEffect(() => {
     if (timesUp) {
@@ -81,6 +83,10 @@ const Game = () => {
     } else {
       setNWrongAnswers((prev) => prev + 1)
     }
+    setEndGameStats((prev: any) => [
+      ...prev,
+      { ...currentGame[count], chosenAnswer: option },
+    ])
   }
 
   const restartGame = () => {
@@ -201,12 +207,13 @@ const Game = () => {
             You answered {score}/{currentGame.length} questions correctly
           </h1>
           {!nWrongAnswers && <h1>Congratulations!</h1>}
-          <div>
+          <div className={styles.buttonContainer}>
             <button
               onClick={() => {
                 setTimesup(false)
                 setAnswer("")
                 restartGame()
+                setEndGameStats([])
               }}
             >
               Restart Game with the Same Settings
@@ -214,6 +221,30 @@ const Game = () => {
             <button onClick={() => dispatch(resetGame())}>
               Change Category and Settings
             </button>
+          </div>
+          <h2>Answers:</h2>
+          <div className={styles.endGameAnswersBox}>
+            {endGameStats.map((answer: any) => {
+              return (
+                <div className={styles.endGameAnswer} key={answer.question}>
+                  <p>{he.decode(answer.question)}</p>
+                  <div>
+                    <p
+                      className={
+                        answer.correct_answer === answer.chosenAnswer
+                          ? styles.correctAnswer
+                          : styles.wrongAnswer
+                      }
+                    >
+                      Your Answer: {he.decode(answer.chosenAnswer)}
+                    </p>
+                    {answer.correct_answer !== answer.chosenAnswer && (
+                      <p>Correct Answer: {he.decode(answer.correct_answer)}</p>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

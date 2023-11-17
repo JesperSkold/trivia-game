@@ -121,7 +121,7 @@ button {
   width: 140px;
 }
 
-.correctAnswerNDifficultyBox{
+.correctAnswerNDifficultyBox {
   display: flex;
   justify-content: space-between;
 }
@@ -132,16 +132,12 @@ button {
 }
 
 .endGame {
-  h1:nth-child(2) {
-    margin-top: 0;
-  }
+  max-height: 96vh;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 0 auto;
   text-align: center;
-  div {
+  .buttonContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -154,5 +150,45 @@ button {
     border-radius: 20px;
     padding: 8px 16px;
     border: 1px solid black;
+  }
+  button:nth-child(2) {
+    margin-bottom: 16px;
+  }
+
+  .endGameAnswersBox {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .endGameAnswer {
+    width: 420px;
+    text-align: center;
+    margin: 8px auto;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 16px;
+    border: 1px solid #9bbec8;
+    border-radius: 20px;
+    background-color: #427d9d;
+    margin-bottom: 16px;
+    @media screen and (max-width:440px) {
+      width: 300px;
+    }
+    div {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+    p {
+      margin: 4px;
+    }
+    .correctAnswer {
+      color: rgba(9, 207, 9, 0.9);
+    }
+    .wrongAnswer {
+      color: rgb(170, 6, 6);
+    }
   }
 }
