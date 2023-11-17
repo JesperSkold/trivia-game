@@ -53,6 +53,7 @@ const Settings = () => {
           onChange={(e) => dispatch(setDifficulty(e.target.value))}
           defaultValue={difficulty}
         >
+          <option value="random">Random</option>
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
@@ -64,6 +65,7 @@ const Settings = () => {
           onChange={(e) => dispatch(setType(e.target.value))}
           defaultValue={type}
         >
+          <option value="random">Random</option>
           <option value="multiple">Multiple Choice</option>
           <option value="boolean">True or False</option>
         </select>

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getCategories } from "../api/getCategories"
-import { getGame } from "../api/getGame"
+import { getGame } from "../api/getCustomGame"
 import { TriviaCategory, TriviaCategories } from "../interface/category"
 import { getQuickGame } from "../api/getQuickGame"
 
@@ -10,7 +10,7 @@ export const fetchCategories = createAsyncThunk(
     return await getCategories()
   }
 )
-export const fetchGame = createAsyncThunk(
+export const fetchCusomGame = createAsyncThunk(
   "game/fetchGame",
   async (settings: any) => {
     return await getGame(settings)
@@ -52,9 +52,9 @@ const initialState: InitState = {
   multiCategoryTitle: [],
 
   currentCategory: { name: "", id: 0 },
-  difficulty: "easy",
+  difficulty: "random",
   questions: "5",
-  type: "multiple",
+  type: "random",
   step: 0,
 
   currentGame: [],
@@ -113,7 +113,7 @@ export const gameSlice = createSlice({
     builder.addCase(fetchQuickGame.pending, (state) => {
       state.loadingQuickGame = "pending"
     })
-    builder.addCase(fetchGame.pending, (state) => {
+    builder.addCase(fetchCusomGame.pending, (state) => {
       state.loadingCustomGame = "pending"
     })
     builder.addCase(fetchCategories.rejected, (state) => {
@@ -122,7 +122,7 @@ export const gameSlice = createSlice({
     builder.addCase(fetchQuickGame.rejected, (state) => {
       state.loadingQuickGame = "rejected"
     })
-    builder.addCase(fetchGame.rejected, (state) => {
+    builder.addCase(fetchCusomGame.rejected, (state) => {
       state.loadingCustomGame = "rejected"
     })
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
@@ -145,13 +145,11 @@ export const gameSlice = createSlice({
 
       state.loadingCategories = "succeeded"
     })
-    builder.addCase(fetchGame.fulfilled, (state, action) => {
-      // if (action.payload.response_code === 0) {
+    builder.addCase(fetchCusomGame.fulfilled, (state, action) => {
         console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
         state.responseCode = action.payload.response_code
         state.loadingCustomGame = "succeeded"
-      // }
     })
 
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {

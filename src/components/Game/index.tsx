@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import {
-  fetchGame,
+  fetchCusomGame,
   resetGame,
   emptyCurrentGame,
   fetchQuickGame,
@@ -56,7 +56,7 @@ const Game = () => {
 
   useEffect(() => {
     if (!currentGame?.length) {
-      dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+      dispatch(fetchCusomGame({ currentCategory, difficulty, questions, type }))
     }
   }, [dispatch])
 
@@ -86,7 +86,7 @@ const Game = () => {
   const restartGame = () => {
     dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
     currentCategory?.name
-      ? dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
+      ? dispatch(fetchCusomGame({ currentCategory, difficulty, questions, type }))
       : dispatch(fetchQuickGame())
     setCount(0)
     setScore(0)
