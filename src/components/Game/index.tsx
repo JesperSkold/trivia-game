@@ -103,7 +103,7 @@ const Game = () => {
         <div className={styles.gameContainer}>
           <div className={styles.header}>
             <BackBtn />
-              <h2 className={styles.categoryName}>{currentCategory?.name ? currentCategory.name : "Quick Play"}</h2>
+              <h2 className={styles.categoryName}>{he.decode(currentGame[count]?.category)}</h2>
             <h2>
               {count + 1}/{currentGame.length}
             </h2>
@@ -187,7 +187,7 @@ const Game = () => {
           <h1>
             You answered {score}/{currentGame.length} questions correctly
           </h1>
-          {!nWrongAnswers && <h1>Congratulations!!!</h1>}
+          {!nWrongAnswers && <h1>Congratulations!</h1>}
           <div>
             <button
               onClick={() => {

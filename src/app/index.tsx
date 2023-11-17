@@ -21,12 +21,13 @@ const renderStep = (step: number) => {
 }
 
 function App() {
-  const { step, loadingCategories, loadingCustomGame, loadingQuickGame } =
+  const { step, loadingCategories, loadingCustomGame, loadingQuickGame, responseCode } =
     useSelector((state: RootState) => state.game)
   const apiError =
     loadingCategories === "rejected" ||
     loadingCustomGame === "rejected" ||
-    loadingQuickGame === "rejected"
+    loadingQuickGame === "rejected" ||
+    (responseCode > 0 && responseCode < 6)
 
   return (
     <div className={styles.app}>

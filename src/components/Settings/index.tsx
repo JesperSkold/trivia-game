@@ -24,7 +24,7 @@ const Settings = () => {
       (Number(e.target.value) > 0 && Number(e.target.value) < 51)
     ) {
       setNQuestions(cleanedValue)
-      dispatch(setQuestions(cleanedValue || 10))
+      dispatch(setQuestions(cleanedValue || 5))
     }
   }
   return (

@@ -25,7 +25,6 @@
   .categoryName {
     margin: 0;
     text-align: center !important;
-    // margin: 0 auto;
   }
 
   .header {
@@ -129,6 +128,9 @@ button {
 }
 
 .endGame {
+  h1:nth-child(2) {
+    margin-top: 0;
+  }
   position: relative;
   display: flex;
   flex-direction: column;

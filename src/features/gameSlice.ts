@@ -38,6 +38,7 @@ interface InitState {
   step: number
 
   currentGame: any
+  responseCode: number
 
   loadingCategories: LoadingState
   loadingCustomGame: LoadingState
@@ -52,11 +53,12 @@ const initialState: InitState = {
 
   currentCategory: { name: "", id: 0 },
   difficulty: "easy",
-  questions: "10",
+  questions: "5",
   type: "multiple",
   step: 0,
 
   currentGame: [],
+  responseCode: 0,
 
   loadingCategories: "idle",
   loadingCustomGame: "idle",
@@ -81,7 +83,6 @@ export const gameSlice = createSlice({
     },
     setType: (state, action) => {
       state.type = action.payload
-      console.log(state.type)
     },
     startGame: (state) => {
       state.step = 2
@@ -92,6 +93,7 @@ export const gameSlice = createSlice({
     },
     goBack: (state) => {
       if (state.step > 0) {
+        state.responseCode = 0
         state.currentGame = []
         if (state.currentCategory.name) {
           state.step -= 1
@@ -144,16 +146,18 @@ export const gameSlice = createSlice({
       state.loadingCategories = "succeeded"
     })
     builder.addCase(fetchGame.fulfilled, (state, action) => {
-      if (action.payload.response_code === 0) {
+      // if (action.payload.response_code === 0) {
         console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
+        state.responseCode = action.payload.response_code
         state.loadingCustomGame = "succeeded"
-      }
+      // }
     })
 
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
       state.currentGame = action.payload.results
+      state.responseCode = action.payload.response_code
       state.step = 2
       state.loadingQuickGame = "succeeded"
     })
