@@ -32,6 +32,7 @@ const Settings = () => {
       <div className={styles.titleContainer}>
         <BackBtn />
         <h1>Settings</h1>
+        <div></div>
       </div>
       <div>
         <label>Number of questions (1-50)</label>

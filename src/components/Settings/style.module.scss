@@ -1,11 +1,17 @@
 .settingsContainer {
-  position: relative;
   padding: 32px;
   width: 700px;
   height: 562px;
   .titleContainer {
+    display: flex;
+    min-width: 100%;
+    flex-direction: row;
+    align-items: center;
     h1 {
-      margin: 0;
+      margin: 0 auto;
+    }
+    div {
+      min-width: 46px;
     }
   }
   display: flex;

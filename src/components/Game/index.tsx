@@ -32,7 +32,7 @@ const Game = () => {
   const [timer, setTimer] = useState<number>(30)
 
   useEffect(() => {
-    if(timesUp) {
+    if (timesUp) {
       setNWrongAnswers((prev) => prev + 1)
     }
     const interval = setInterval(() => {
@@ -55,13 +55,13 @@ const Game = () => {
   }, [answer, timesUp])
 
   useEffect(() => {
-    if (!currentGame.length) {
+    if (!currentGame?.length) {
       dispatch(fetchGame({ currentCategory, difficulty, questions, type }))
     }
   }, [dispatch])
 
   useEffect(() => {
-    if (currentGame.length > 0 && currentGame.length !== count) {
+    if (currentGame?.length > 0 && currentGame?.length !== count) {
       const mergedArr = [
         ...currentGame[count]?.incorrect_answers,
         currentGame[count]?.correct_answer,
@@ -99,10 +99,11 @@ const Game = () => {
       {(loadingCustomGame === "pending" || loadingQuickGame === "pending") && (
         <Loader />
       )}
-      {currentGame.length > 0 && currentGame.length !== count && (
+      {currentGame?.length > 0 && currentGame?.length !== count && (
         <div className={styles.gameContainer}>
-          <BackBtn />
-          <div className={styles.questionCounter}>
+          <div className={styles.header}>
+            <BackBtn />
+              <h2 className={styles.categoryName}>{currentCategory?.name ? currentCategory.name : "Quick Play"}</h2>
             <h2>
               {count + 1}/{currentGame.length}
             </h2>
@@ -113,7 +114,7 @@ const Game = () => {
               <h1>{he.decode(currentGame[count]?.question)}</h1>
             </div>
             <div className={styles.answers}>
-              {answers.length > 0 &&
+              {answers?.length > 0 &&
                 answers.map((option: string) => (
                   <button
                     key={option}
@@ -131,7 +132,7 @@ const Game = () => {
                     (answer || timesUp) &&
                     option === currentGame[count]?.correct_answer
                       ? styles.correctAnswer
-                      : (answer ||timesUp) &&
+                      : (answer || timesUp) &&
                         option !== currentGame[count]?.correct_answer &&
                         styles.wrongAnswer
                   }`}
@@ -140,7 +141,7 @@ const Game = () => {
                   </button>
                 ))}
             </div>
-            {(!answer && !timesUp) && (
+            {!answer && !timesUp && (
               <div className={styles.nextBtnPlaceholder}></div>
             )}
             {(answer || timesUp) && (
@@ -148,11 +149,11 @@ const Game = () => {
                 className={styles.nextBtn}
                 onClick={() => {
                   setCount((prev) => prev + 1)
-                  if ((currentGame.length - 1) !== count) {
+                  if (currentGame.length - 1 !== count) {
                     setAnswer("")
                     setTimesup(false)
                   }
-                  setTimer(30) 
+                  setTimer(30)
                 }}
               >
                 {currentGame.length - 1 === count
@@ -181,14 +182,20 @@ const Game = () => {
           </h2>
         </div>
       )}
-      {currentGame.length === count && count !== 0 && (
+      {currentGame?.length === count && count !== 0 && (
         <div className={styles.endGame}>
           <h1>
             You answered {score}/{currentGame.length} questions correctly
           </h1>
           {!nWrongAnswers && <h1>Congratulations!!!</h1>}
           <div>
-            <button onClick={() => {setTimesup(false); setAnswer(""); restartGame()}}>
+            <button
+              onClick={() => {
+                setTimesup(false)
+                setAnswer("")
+                restartGame()
+              }}
+            >
               Restart Game with the Same Settings
             </button>
             <button onClick={() => dispatch(resetGame())}>
