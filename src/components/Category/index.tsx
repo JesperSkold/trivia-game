@@ -18,9 +18,9 @@ const Category = ({
   return (
     <>
       {nested ? (
-        <button className={styles.category} onClick={() => dispatch(setCurrentCategory({name, id}))}>{name.slice(name.indexOf(":") + 2)}</button>
+        <button onClick={() => dispatch(setCurrentCategory({name, id}))}>{name.slice(name.indexOf(":") + 2)}</button>
       ) : (
-        <button className={styles.category} onClick={() => dispatch(setCurrentCategory({name, id}))}>{name}</button>
+        <button onClick={() => dispatch(setCurrentCategory({name, id}))}>{name}</button>
       )}
     </>
   )
