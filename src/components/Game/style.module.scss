@@ -70,7 +70,9 @@
     align-items: center;
 
     button {
-      min-width: 240px;
+      white-space: normal;
+      text-align: center;
+      width: 240px;
     }
 
     .correctAnswer {
@@ -183,7 +185,7 @@
     .correctAnswer {
       color: rgba(9, 207, 9, 0.9);
     }
-    
+
     .wrongAnswer {
       color: rgb(170, 6, 6);
     }
