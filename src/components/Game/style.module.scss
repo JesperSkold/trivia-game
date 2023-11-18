@@ -156,16 +156,17 @@ button {
   }
 
   .endGameAnswersBox {
+    overflow-x: hidden;
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
   }
-
+  
   .endGameAnswer {
     width: 420px;
     text-align: center;
-    margin: 8px auto;
+    margin: 8px 16px;
     display: flex;
     flex-direction: column;
     padding: 8px 16px;
