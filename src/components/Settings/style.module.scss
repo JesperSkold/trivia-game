@@ -2,26 +2,31 @@
   padding: 32px;
   width: 700px;
   height: 562px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   .titleContainer {
     display: flex;
     min-width: 100%;
     flex-direction: row;
     align-items: center;
+
     h1 {
       margin: 0 auto;
     }
+
     div {
       min-width: 46px;
     }
   }
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
   select,
   input {
     min-width: 210px;
     min-height: 21px;
   }
+  
   div {
     display: flex;
     flex-direction: column;

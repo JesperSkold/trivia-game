@@ -1,14 +1,17 @@
 .categoryList {
-  .title{
+  text-align: center;
+
+  .title {
     margin-top: 0;
   }
-  text-align: center;
+
   .categoryContainer {
     div {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 16px;
+
       @media screen and (max-width: 400px) {
         gap: 8px;
       }

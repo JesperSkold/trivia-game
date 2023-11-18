@@ -2,7 +2,6 @@ import React from "react"
 import { AppDispatch } from "../../store/store"
 import { useDispatch } from "react-redux"
 import { setCurrentCategory } from "../../features/gameSlice"
-import styles from "./style.module.scss"
 
 const Category = ({
   name,

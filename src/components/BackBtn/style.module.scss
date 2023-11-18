@@ -1,8 +1,8 @@
 .backBtn {
   font-size: 40px;
+  min-width: 46px;
   color: white;
   cursor: pointer;
-  min-width: 46px;
 
   @media screen and (max-width: 700px) {
   font-size: 26px;
