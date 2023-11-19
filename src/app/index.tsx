@@ -6,8 +6,7 @@ import CategoryList from "../components/CategoryList"
 import Game from "../components/Game"
 import styles from "./style.module.scss"
 import ApiError from "../components/ApiError"
-// import bg from "./images/bg.svg"
-
+ 
 const renderStep = (step: number) => {
   switch (step) {
     case 0:

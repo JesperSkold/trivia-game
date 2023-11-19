@@ -1,7 +1,7 @@
 .gameContainer {
   position: relative;
   background-color: #427d9d;
-  padding: 32px;
+  padding: 16px 32px;
   width: 700px;
   min-height: 420px;
   border-radius: 16px;
@@ -52,6 +52,10 @@
       @media screen and (max-width: 700px) {
         height: unset;
         min-height: 130px;
+        h1 {
+          word-wrap: break-word;
+          max-width: 300px;
+        }
       }
     }
   }
