@@ -6,6 +6,7 @@ import CategoryList from "../components/CategoryList"
 import Game from "../components/Game"
 import styles from "./style.module.scss"
 import ApiError from "../components/ApiError"
+// import bg from "./images/bg.svg"
 
 const renderStep = (step: number) => {
   switch (step) {
@@ -21,8 +22,13 @@ const renderStep = (step: number) => {
 }
 
 function App() {
-  const { step, loadingCategories, loadingCustomGame, loadingQuickGame, responseCode } =
-    useSelector((state: RootState) => state.game)
+  const {
+    step,
+    loadingCategories,
+    loadingCustomGame,
+    loadingQuickGame,
+    responseCode,
+  } = useSelector((state: RootState) => state.game)
   const apiError =
     loadingCategories === "rejected" ||
     loadingCustomGame === "rejected" ||
@@ -30,9 +36,11 @@ function App() {
     (responseCode > 0 && responseCode < 6)
 
   return (
-    <div className={styles.app}>
-      {!apiError && renderStep(step)}
-      {apiError && <ApiError />}
+    <div style={{ backgroundImage: `url('/images/bg.svg')` }} className={styles.bgWrapper}>
+      <div className={styles.app}>
+        {!apiError && renderStep(step)}
+        {apiError && <ApiError />}
+      </div>
     </div>
   )
 }
