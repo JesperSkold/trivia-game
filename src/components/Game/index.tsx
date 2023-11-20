@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import {
-  fetchCusomGame,
+  fetchCustomGame,
   resetGame,
   emptyCurrentGame,
   fetchQuickGame,
@@ -13,6 +13,7 @@ import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
 import Loader from "../Loader"
 import ReactConfetti from "react-confetti"
+import { IGame } from "../../interface/game"
 
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -28,12 +29,12 @@ const Game = () => {
   //rename these states
   const [score, setScore] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
+  const [timer, setTimer] = useState<number>(30)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
   const [answer, setAnswer] = useState<string>("")
-  const [answers, setAnswers] = useState<any>([])
+  const [answers, setAnswers] = useState<string[]>([])
   const [timesUp, setTimesup] = useState<boolean>(false)
-  const [timer, setTimer] = useState<number>(30)
-  const [endGameStats, setEndGameStats] = useState<any>([])
+  const [endGameStats, setEndGameStats] = useState<IGame[]>([])
   const { width, height } = useWindowSize()
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const Game = () => {
 
   useEffect(() => {
     if (!currentGame?.length) {
-      dispatch(fetchCusomGame({ currentCategory, difficulty, questions, type }))
+      dispatch(fetchCustomGame({ currentCategory, difficulty, questions, type }))
     }
   }, [dispatch])
 
@@ -86,7 +87,7 @@ const Game = () => {
     } else {
       setNWrongAnswers((prev) => prev + 1)
     }
-    setEndGameStats((prev: any) => [
+    setEndGameStats((prev) => [
       ...prev,
       { ...currentGame[count], chosenAnswer: option },
     ])
@@ -96,7 +97,7 @@ const Game = () => {
     dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
     currentCategory?.name
       ? dispatch(
-          fetchCusomGame({ currentCategory, difficulty, questions, type })
+          fetchCustomGame({ currentCategory, difficulty, questions, type })
         )
       : dispatch(fetchQuickGame())
     setCount(0)
@@ -232,7 +233,7 @@ const Game = () => {
           </div>
           <h2>Answers:</h2>
           <div className={styles.endGameAnswersBox}>
-            {endGameStats.map((answer: any) => {
+            {endGameStats.map((answer) => {
               return (
                 <div className={styles.endGameAnswer} key={answer.question}>
                   <p>{he.decode(answer.question)}</p>
@@ -244,7 +245,7 @@ const Game = () => {
                           : styles.wrongAnswer
                       }
                     >
-                      Your Answer: {he.decode(answer.chosenAnswer)}
+                      Your Answer: {he.decode(answer.chosenAnswer || "")}
                     </p>
                     {answer.correct_answer !== answer.chosenAnswer && (
                       <p>Correct Answer: {he.decode(answer.correct_answer)}</p>

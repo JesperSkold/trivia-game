@@ -3,6 +3,8 @@ import { getCategories } from "../api/getCategories"
 import { getGame } from "../api/getCustomGame"
 import { TriviaCategory, TriviaCategories } from "../interface/category"
 import { getQuickGame } from "../api/getQuickGame"
+import { Settings } from "../interface/settings"
+import { IGame } from "../interface/game"
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
@@ -10,9 +12,9 @@ export const fetchCategories = createAsyncThunk(
     return await getCategories()
   }
 )
-export const fetchCusomGame = createAsyncThunk(
+export const fetchCustomGame = createAsyncThunk(
   "game/fetchGame",
-  async (settings: any) => {
+  async (settings: Settings) => {
     return await getGame(settings)
   }
 )
@@ -37,7 +39,7 @@ interface InitState {
   type: string
   step: number
 
-  currentGame: any
+  currentGame: IGame[]
   responseCode: number
 
   loadingCategories: LoadingState
@@ -113,7 +115,7 @@ export const gameSlice = createSlice({
     builder.addCase(fetchQuickGame.pending, (state) => {
       state.loadingQuickGame = "pending"
     })
-    builder.addCase(fetchCusomGame.pending, (state) => {
+    builder.addCase(fetchCustomGame.pending, (state) => {
       state.loadingCustomGame = "pending"
     })
     builder.addCase(fetchCategories.rejected, (state) => {
@@ -122,7 +124,7 @@ export const gameSlice = createSlice({
     builder.addCase(fetchQuickGame.rejected, (state) => {
       state.loadingQuickGame = "rejected"
     })
-    builder.addCase(fetchCusomGame.rejected, (state) => {
+    builder.addCase(fetchCustomGame.rejected, (state) => {
       state.loadingCustomGame = "rejected"
     })
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
@@ -145,7 +147,7 @@ export const gameSlice = createSlice({
 
       state.loadingCategories = "succeeded"
     })
-    builder.addCase(fetchCusomGame.fulfilled, (state, action) => {
+    builder.addCase(fetchCustomGame.fulfilled, (state, action) => {
         console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
         state.responseCode = action.payload.response_code
