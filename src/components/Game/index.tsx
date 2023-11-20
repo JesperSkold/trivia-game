@@ -26,14 +26,13 @@ const Game = () => {
     loadingCustomGame,
     loadingQuickGame,
   } = useSelector((state: RootState) => state.game)
-  //rename these states
-  const [score, setScore] = useState<number>(0)
-  const [count, setCount] = useState<number>(0)
-  const [timer, setTimer] = useState<number>(30)
+  const [nRightAnswers, setNRightAnswers] = useState<number>(0)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
-  const [answer, setAnswer] = useState<string>("")
-  const [answers, setAnswers] = useState<string[]>([])
-  const [timesUp, setTimesup] = useState<boolean>(false)
+  const [questionIndex, setQuestionIndex] = useState<number>(0)
+  const [timer, setTimer] = useState<number>(30)
+  const [userAnswer, setUserAnswer] = useState<string>("")
+  const [allAnswers, setAllAnswers] = useState<string[]>([])
+  const [timesUp, setTimesUp] = useState<boolean>(false)
   const [endGameStats, setEndGameStats] = useState<IGame[]>([])
   const { width, height } = useWindowSize()
 
@@ -45,10 +44,10 @@ const Game = () => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
           clearInterval(interval)
-          setTimesup(true)
+          setTimesUp(true)
           return 0
         } else {
-          if (answer) {
+          if (userAnswer) {
             clearInterval(interval)
             return prevTimer
           } else {
@@ -58,38 +57,40 @@ const Game = () => {
       })
     }, 1000)
     return () => clearInterval(interval)
-  }, [answer, timesUp])
+  }, [userAnswer, timesUp])
 
   useEffect(() => {
     if (!currentGame?.length) {
-      dispatch(fetchCustomGame({ currentCategory, difficulty, questions, type }))
+      dispatch(
+        fetchCustomGame({ currentCategory, difficulty, questions, type })
+      )
     }
   }, [dispatch])
 
   useEffect(() => {
-    if (currentGame?.length > 0 && currentGame?.length !== count) {
+    if (currentGame?.length > 0 && currentGame?.length !== questionIndex) {
       const mergedArr = [
-        ...currentGame[count]?.incorrect_answers,
-        currentGame[count]?.correct_answer,
+        ...currentGame[questionIndex]?.incorrect_answers,
+        currentGame[questionIndex]?.correct_answer,
       ]
       if (mergedArr.find((elem) => elem === "True")) {
-        setAnswers(mergedArr.sort().reverse())
+        setAllAnswers(mergedArr.sort().reverse())
       } else {
-        setAnswers(mergedArr.sort((a, b) => 0.5 - Math.random()))
+        setAllAnswers(mergedArr.sort((a, b) => 0.5 - Math.random()))
       }
     }
-  }, [currentGame, count])
+  }, [currentGame, questionIndex])
 
   const handleAnswer = (option: string) => {
-    setAnswer(option)
-    if (option === currentGame[count]?.correct_answer) {
-      setScore((prev) => prev + 1)
+    setUserAnswer(option)
+    if (option === currentGame[questionIndex]?.correct_answer) {
+      setNRightAnswers((prev) => prev + 1)
     } else {
       setNWrongAnswers((prev) => prev + 1)
     }
     setEndGameStats((prev) => [
       ...prev,
-      { ...currentGame[count], chosenAnswer: option },
+      { ...currentGame[questionIndex], chosenAnswer: option },
     ])
   }
 
@@ -100,10 +101,10 @@ const Game = () => {
           fetchCustomGame({ currentCategory, difficulty, questions, type })
         )
       : dispatch(fetchQuickGame())
-    setCount(0)
-    setScore(0)
+    setQuestionIndex(0)
+    setNRightAnswers(0)
     setNWrongAnswers(0)
-    setAnswer("")
+    setUserAnswer("")
   }
 
   return (
@@ -111,43 +112,43 @@ const Game = () => {
       {(loadingCustomGame === "pending" || loadingQuickGame === "pending") && (
         <Loader />
       )}
-      {currentGame?.length > 0 && currentGame?.length !== count && (
+      {currentGame?.length > 0 && currentGame?.length !== questionIndex && (
         <div className={styles.gameContainer}>
           <div className={styles.header}>
             <BackBtn />
             <h2 className={styles.categoryName}>
-              {he.decode(currentGame[count]?.category)}
+              {he.decode(currentGame[questionIndex]?.category)}
             </h2>
             <h2>
-              {count + 1}/{currentGame.length}
+              {questionIndex + 1}/{currentGame.length}
             </h2>
           </div>
           <div className={styles.border}></div>
           <div className={styles.questionContainer}>
             <div className={styles.question}>
-              <h1>{he.decode(currentGame[count]?.question)}</h1>
+              <h1>{he.decode(currentGame[questionIndex]?.question)}</h1>
             </div>
             <div className={styles.answers}>
-              {answers?.length > 0 &&
-                answers.map((option: string) => (
+              {allAnswers?.length > 0 &&
+                allAnswers.map((option: string) => (
                   <button
                     key={option}
                     onClick={() => {
                       handleAnswer(option)
                     }}
-                    disabled={!!answer || timesUp}
+                    disabled={!!userAnswer || timesUp}
                     className={`
                 ${
-                  answer === option &&
-                  option !== currentGame[count]?.correct_answer &&
+                  userAnswer === option &&
+                  option !== currentGame[questionIndex]?.correct_answer &&
                   styles.chosenWrongAnswer
                 }
                   ${
-                    (answer || timesUp) &&
-                    option === currentGame[count]?.correct_answer
+                    (userAnswer || timesUp) &&
+                    option === currentGame[questionIndex]?.correct_answer
                       ? styles.correctAnswer
-                      : (answer || timesUp) &&
-                        option !== currentGame[count]?.correct_answer &&
+                      : (userAnswer || timesUp) &&
+                        option !== currentGame[questionIndex]?.correct_answer &&
                         styles.wrongAnswer
                   }`}
                   >
@@ -155,22 +156,22 @@ const Game = () => {
                   </button>
                 ))}
             </div>
-            {!answer && !timesUp && (
+            {!userAnswer && !timesUp && (
               <div className={styles.nextBtnPlaceholder}></div>
             )}
-            {(answer || timesUp) && (
+            {(userAnswer || timesUp) && (
               <button
                 className={styles.nextBtn}
                 onClick={() => {
-                  setCount((prev) => prev + 1)
-                  if (currentGame.length - 1 !== count) {
-                    setAnswer("")
-                    setTimesup(false)
+                  setQuestionIndex((prev) => prev + 1)
+                  if (currentGame.length - 1 !== questionIndex) {
+                    setUserAnswer("")
+                    setTimesUp(false)
                   }
                   setTimer(30)
                 }}
               >
-                {currentGame.length - 1 === count
+                {currentGame.length - 1 === questionIndex
                   ? "Finish Game"
                   : "Next Question"}
               </button>
@@ -180,12 +181,12 @@ const Game = () => {
             <div className={styles.border}></div>
             <div className={styles.correctAnswerNDifficultyBox}>
               <h2>
-                Correct Answer{score !== 1 && "s"}: {score}
+                Correct Answer{nRightAnswers !== 1 && "s"}: {nRightAnswers}
               </h2>
               <h2>
                 Difficulty:{" "}
-                {currentGame[count]?.difficulty[0].toUpperCase() +
-                  currentGame[count]?.difficulty.slice(1)}
+                {currentGame[questionIndex]?.difficulty[0].toUpperCase() +
+                  currentGame[questionIndex]?.difficulty.slice(1)}
               </h2>
             </div>
             <div className={styles.wrongAnswerNTimeBox}>
@@ -205,22 +206,29 @@ const Game = () => {
           </section>
         </div>
       )}
-      {currentGame?.length === count && count !== 0 && (
+      {currentGame?.length === questionIndex && questionIndex !== 0 && (
         <div className={styles.endGame}>
           <h1>
-            You answered {score}/{currentGame.length} questions correctly
+            You answered {nRightAnswers}/{currentGame.length} questions
+            correctly
           </h1>
           {!nWrongAnswers && (
             <>
-              <ReactConfetti width={width} height={height} recycle={false} numberOfPieces={400} colors={["#164863","#427D9D","#9BBEC8","#DDF2FD",]}/>
+              <ReactConfetti
+                width={width}
+                height={height}
+                recycle={false}
+                numberOfPieces={400}
+                colors={["#164863", "#427D9D", "#9BBEC8", "#DDF2FD"]}
+              />
               <h1>Congratulations!</h1>
             </>
           )}
           <div className={styles.buttonContainer}>
             <button
               onClick={() => {
-                setTimesup(false)
-                setAnswer("")
+                setTimesUp(false)
+                setUserAnswer("")
                 restartGame()
                 setEndGameStats([])
               }}
