@@ -24,9 +24,19 @@
   select,
   input {
     min-width: 210px;
-    min-height: 21px;
+    height: 30px;
+    padding: 0 10px;
+    background-color: #ddf2fd;
+    border-color: #9bbec8;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
   }
-  
+
+  label {
+    margin-bottom: 8px;
+  }
+
   div {
     display: flex;
     flex-direction: column;
