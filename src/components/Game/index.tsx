@@ -122,7 +122,13 @@ const Game = () => {
           <div className={styles.header}>
             <BackBtn />
             <h2 className={styles.categoryName}>
-              {he.decode(currentGame[questionIndex]?.category)}
+              {he.decode(
+                /:/.test(currentGame[questionIndex]?.category)
+                  ? currentGame[questionIndex]?.category.slice(
+                      currentGame[questionIndex]?.category.indexOf(":") + 2
+                    )
+                  : currentGame[questionIndex]?.category
+              )}
             </h2>
             <h2>
               {questionIndex + 1}/{currentGame.length}

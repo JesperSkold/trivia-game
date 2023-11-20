@@ -148,7 +148,6 @@ export const gameSlice = createSlice({
       state.loadingCategories = "succeeded"
     })
     builder.addCase(fetchCustomGame.fulfilled, (state, action) => {
-        console.log(action.payload, "currentgame from slice")
         state.currentGame = action.payload.results
         state.responseCode = action.payload.response_code
         state.loadingCustomGame = "succeeded"
