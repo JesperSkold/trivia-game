@@ -40,7 +40,7 @@ const Game = () => {
     if (timesUp) {
       setNWrongAnswers((prev) => prev + 1)
     }
-    
+
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
@@ -66,6 +66,7 @@ const Game = () => {
         fetchCustomGame({ currentCategory, difficulty, questions, type })
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   useEffect(() => {

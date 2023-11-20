@@ -22,6 +22,7 @@ const CategoryList = () => {
     if (!allCategories.trivia_categories.length) {
       dispatch(fetchCategories())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   return (
