@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getCategories } from "../api/getCategories"
 import { getGame } from "../api/getCustomGame"
-import { TriviaCategory, TriviaCategories } from "../interface/category"
 import { getQuickGame } from "../api/getQuickGame"
+import { TriviaCategory, TriviaCategories } from "../interface/category"
 import { Settings } from "../interface/settings"
 import { IGame } from "../interface/game"
 

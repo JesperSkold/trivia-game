@@ -8,12 +8,12 @@ import {
   fetchQuickGame,
 } from "../../features/gameSlice"
 import { useWindowSize } from "usehooks-ts"
-import he from "he"
 import BackBtn from "../BackBtn"
-import styles from "./style.module.scss"
 import Loader from "../Loader"
 import ReactConfetti from "react-confetti"
+import he from "he"
 import { IGame } from "../../interface/game"
+import styles from "./style.module.scss"
 
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -40,6 +40,7 @@ const Game = () => {
     if (timesUp) {
       setNWrongAnswers((prev) => prev + 1)
     }
+    
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
@@ -73,6 +74,7 @@ const Game = () => {
         ...currentGame[questionIndex]?.incorrect_answers,
         currentGame[questionIndex]?.correct_answer,
       ]
+
       if (mergedArr.find((elem) => elem === "True")) {
         setAllAnswers(mergedArr.sort().reverse())
       } else {
@@ -83,11 +85,13 @@ const Game = () => {
 
   const handleAnswer = (option: string) => {
     setUserAnswer(option)
+
     if (option === currentGame[questionIndex]?.correct_answer) {
       setNRightAnswers((prev) => prev + 1)
     } else {
       setNWrongAnswers((prev) => prev + 1)
     }
+
     setEndGameStats((prev) => [
       ...prev,
       { ...currentGame[questionIndex], chosenAnswer: option },
@@ -95,7 +99,7 @@ const Game = () => {
   }
 
   const restartGame = () => {
-    dispatch(emptyCurrentGame()) //prevents old question from flickering into view when restarting
+    dispatch(emptyCurrentGame())
     currentCategory?.name
       ? dispatch(
           fetchCustomGame({ currentCategory, difficulty, questions, type })

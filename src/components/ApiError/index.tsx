@@ -4,8 +4,8 @@ import { AppDispatch, RootState } from "../../store/store"
 import styles from "./style.module.scss"
 import { goBack } from "../../features/gameSlice"
 const ApiError = () => {
-  const { responseCode } = useSelector((state: RootState) => state.game)
   const dispatch = useDispatch<AppDispatch>()
+  const { responseCode } = useSelector((state: RootState) => state.game)
 
   return (
     <div className={styles.errorContainer}>

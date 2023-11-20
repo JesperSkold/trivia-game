@@ -27,6 +27,7 @@ const Settings = () => {
       dispatch(setQuestions(cleanedValue || 5))
     }
   }
+  
   return (
     <div className={styles.settingsContainer}>
       <div className={styles.titleContainer}>

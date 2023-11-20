@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import { fetchCategories, fetchQuickGame } from "../../features/gameSlice"
+import { TriviaCategory } from "../../interface/category"
 import Category from "../Category"
-import { TriviaCategories, TriviaCategory } from "../../interface/category"
-import styles from "./style.module.scss"
 import Loader from "../Loader"
+import styles from "./style.module.scss"
 
 const CategoryList = () => {
   const dispatch = useDispatch<AppDispatch>()
