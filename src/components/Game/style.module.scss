@@ -1,5 +1,4 @@
 .gameContainer {
-  position: relative;
   background-color: #427d9d;
   padding: 16px 32px;
   width: 700px;
@@ -136,11 +135,12 @@
 
 .endGame {
   max-height: 96vh;
-  position: relative;
   display: flex;
   flex-direction: column;
   text-align: center;
-
+h1{
+  margin-top: 0;
+}
   .buttonContainer {
     display: flex;
     flex-wrap: wrap;

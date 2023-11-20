@@ -7,10 +7,12 @@ import {
   emptyCurrentGame,
   fetchQuickGame,
 } from "../../features/gameSlice"
+import { useWindowSize } from "usehooks-ts"
 import he from "he"
 import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
 import Loader from "../Loader"
+import ReactConfetti from "react-confetti"
 
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -32,6 +34,7 @@ const Game = () => {
   const [timesUp, setTimesup] = useState<boolean>(false)
   const [timer, setTimer] = useState<number>(30)
   const [endGameStats, setEndGameStats] = useState<any>([])
+  const { width, height } = useWindowSize()
 
   useEffect(() => {
     if (timesUp) {
@@ -206,7 +209,12 @@ const Game = () => {
           <h1>
             You answered {score}/{currentGame.length} questions correctly
           </h1>
-          {!nWrongAnswers && <h1>Congratulations!</h1>}
+          {!nWrongAnswers && (
+            <>
+              <ReactConfetti width={width} height={height} recycle={false} numberOfPieces={400} colors={["#164863","#427D9D","#9BBEC8","#DDF2FD",]}/>
+              <h1>Congratulations!</h1>
+            </>
+          )}
           <div className={styles.buttonContainer}>
             <button
               onClick={() => {
