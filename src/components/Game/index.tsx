@@ -41,7 +41,6 @@ const Game = () => {
   const [timesUp, setTimesUp] = useState<boolean>(false)
   const [endGameStats, setEndGameStats] = useState<IGame[]>([])
   const { width, height } = useWindowSize()
-  console.log(currentCategory, "currentcat")
 
   useEffect(() => {
     if ((timer === "on" || !currentCategory.name) && !timesUp && !userAnswer) {
@@ -59,6 +58,7 @@ const Game = () => {
 
       return () => clearInterval(interval)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAnswer, timesUp])
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const Game = () => {
         },
       ])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timesUp])
 
   useEffect(() => {
@@ -311,13 +312,15 @@ const Game = () => {
                             : answer.category
                         )}
                       </p>
-                      {(timer === "on" || !currentCategory.name) && <p>
-                        {answer.timeSpent}/
-                        {currentCategory.name
-                          ? Number(timerSeconds)
-                          : DEFAULT_TIMER}
-                        {" "}Seconds Passed
-                      </p>}
+                      {(timer === "on" || !currentCategory.name) && (
+                        <p>
+                          {answer.timeSpent}/
+                          {currentCategory.name
+                            ? Number(timerSeconds)
+                            : DEFAULT_TIMER}{" "}
+                          Seconds Passed
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
