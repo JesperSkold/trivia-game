@@ -4,30 +4,47 @@ import { AppDispatch, RootState } from "../../store/store"
 import {
   setDifficulty,
   setType,
-  setQuestions,
+  setNQuestions,
   startGame,
+  setTimerSeconds,
+  setTimer,
 } from "../../features/gameSlice"
 import BackBtn from "../BackBtn"
 import styles from "./style.module.scss"
 
 const Settings = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { difficulty, questions, type } = useSelector(
+  const { difficulty, nQuestions, type, timer, timerSeconds } = useSelector(
     (state: RootState) => state.game
   )
-  const [nQuestions, setNQuestions] = useState<string | number>(questions)
+  const [inputNQuestions, setInputNQuestions] = useState<string>(nQuestions)
+  const [inputTimerSeconds, setInputTimerSeconds] =
+    useState<string>(timerSeconds)
 
-  const numberHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const numberHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
     const cleanedValue = e.target.value.replace(/[^0-9e+-]/g, "")
-    if (
-      e.target.value === "" ||
-      (Number(e.target.value) > 0 && Number(e.target.value) < 51)
-    ) {
-      setNQuestions(cleanedValue)
-      dispatch(setQuestions(cleanedValue || 5))
+    if (field === "nQuestionField") {
+      if (
+        e.target.value === "" ||
+        (Number(e.target.value) >= 1 && Number(e.target.value) <= 50)
+      ) {
+        setInputNQuestions(cleanedValue)
+        dispatch(setNQuestions(cleanedValue || 5))
+      }
+    } else if (field === "timerField") {
+      if (
+        e.target.value === "" ||
+        (Number(e.target.value) >= 1 && Number(e.target.value) <= 60)
+      ) {
+        setInputTimerSeconds(cleanedValue)
+        dispatch(setTimerSeconds(cleanedValue || 30))
+      }
     }
   }
-  
+
   return (
     <div className={styles.settingsContainer}>
       <div className={styles.titleContainer}>
@@ -38,11 +55,11 @@ const Settings = () => {
       <div>
         <label>Number of questions (1-50)</label>
         <input
-          onChange={numberHandler}
+          onChange={(e) => numberHandler(e, "nQuestionField")}
           type="number"
           min="1"
           max="50"
-          value={nQuestions}
+          value={inputNQuestions}
           onKeyDown={(e) =>
             ["e", "E", "+", "-", ".", ","].includes(e.key) && e.preventDefault()
           }
@@ -71,6 +88,32 @@ const Settings = () => {
           <option value="boolean">True or False</option>
         </select>
       </div>
+      <div>
+        <label>Question Timer</label>
+        <select
+          onChange={(e) => dispatch(setTimer(e.target.value))}
+          defaultValue={timer}
+        >
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      {timer === "on" && (
+        <div>
+          <label>Seconds to Answer</label>
+          <input
+            onChange={(e) => numberHandler(e, "timerField")}
+            type="number"
+            min="1"
+            max="60"
+            value={inputTimerSeconds}
+            onKeyDown={(e) =>
+              ["e", "E", "+", "-", ".", ","].includes(e.key) &&
+              e.preventDefault()
+            }
+          />
+        </div>
+      )}
       {<button onClick={() => dispatch(startGame())}>Start Game!</button>}
     </div>
   )

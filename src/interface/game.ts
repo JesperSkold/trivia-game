@@ -6,4 +6,5 @@ export interface IGame {
   question: string
   type: string
   chosenAnswer?: string
+  timeSpent?: number
 }

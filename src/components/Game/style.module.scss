@@ -93,20 +93,19 @@
     }
   }
 
-  .timesUp {
-    color: rgb(170, 6, 6);
-  }
-
-  .timesAlmostUp {
-    color: rgba(170, 6, 6, 0.5);
-  }
-
   .answersMeta {
     margin-top: auto;
 
     h2 {
       margin: 0;
     }
+  }
+  .timesUp {
+    color: rgb(170, 6, 6);
+  }
+
+  .timesAlmostUp {
+    color: rgba(170, 6, 6, 0.5);
   }
 }
 
@@ -157,41 +156,47 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
 
-  .endGameAnswer {
-    width: 420px;
-    text-align: center;
-    margin: 8px 16px;
-    display: flex;
-    flex-direction: column;
-    padding: 8px 16px;
-    border: 1px solid #9bbec8;
-    border-radius: 20px;
-    background-color: #427d9d;
-    margin-bottom: 16px;
-
-    @media screen and (max-width: 440px) {
-      width: 300px;
-      margin: 4px 8px;
-    }
-
-    div {
-      margin-top: 8px;
+    .endGameAnswer {
+      width: 420px;
+      text-align: center;
+      margin: 8px 16px;
       display: flex;
       flex-direction: column;
-    }
+      padding: 8px 16px;
+      border: 1px solid #9bbec8;
+      border-radius: 20px;
+      background-color: #427d9d;
+      margin-bottom: 16px;
 
-    p {
-      margin: 4px;
-    }
+      @media screen and (max-width: 440px) {
+        width: 300px;
+        margin: 4px 8px;
+      }
 
-    .correctAnswer {
-      color: rgba(9, 207, 9, 0.9);
-    }
+      div {
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+      }
 
-    .wrongAnswer {
-      color: rgb(170, 6, 6);
+      p {
+        margin: 4px;
+      }
+
+      .categoryNTimeBox {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .correctAnswer {
+        color: rgba(9, 207, 9, 0.9);
+      }
+
+      .wrongAnswer {
+        color: rgb(170, 6, 6);
+      }
     }
   }
 }

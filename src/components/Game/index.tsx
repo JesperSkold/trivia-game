@@ -15,55 +15,72 @@ import he from "he"
 import { IGame } from "../../interface/game"
 import styles from "./style.module.scss"
 
+const DEFAULT_TIMER = 30
+
 const Game = () => {
   const dispatch = useDispatch<AppDispatch>()
   const {
     currentGame,
     currentCategory,
     difficulty,
-    questions,
+    nQuestions,
     type,
     loadingCustomGame,
     loadingQuickGame,
+    timer,
+    timerSeconds,
   } = useSelector((state: RootState) => state.game)
   const [nRightAnswers, setNRightAnswers] = useState<number>(0)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
   const [questionIndex, setQuestionIndex] = useState<number>(0)
-  const [timer, setTimer] = useState<number>(30)
+  const [countDown, setCountDown] = useState<number>(
+    currentCategory.name ? Number(timerSeconds) : DEFAULT_TIMER
+  )
   const [userAnswer, setUserAnswer] = useState<string>("")
   const [allAnswers, setAllAnswers] = useState<string[]>([])
   const [timesUp, setTimesUp] = useState<boolean>(false)
   const [endGameStats, setEndGameStats] = useState<IGame[]>([])
   const { width, height } = useWindowSize()
+  console.log(currentCategory, "currentcat")
+
+  useEffect(() => {
+    if ((timer === "on" || !currentCategory.name) && !timesUp && !userAnswer) {
+      const interval = setInterval(() => {
+        setCountDown((prevTimer) => {
+          if (prevTimer === 1) {
+            clearInterval(interval)
+            setTimesUp(true)
+            return 0
+          } else {
+            return prevTimer - 1
+          }
+        })
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [userAnswer, timesUp])
 
   useEffect(() => {
     if (timesUp) {
       setNWrongAnswers((prev) => prev + 1)
-    }
 
-    const interval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(interval)
-          setTimesUp(true)
-          return 0
-        } else {
-          if (userAnswer) {
-            clearInterval(interval)
-            return prevTimer
-          } else {
-            return prevTimer - 1
-          }
-        }
-      })
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [userAnswer, timesUp])
+      setEndGameStats((prev) => [
+        ...prev,
+        {
+          ...currentGame[questionIndex],
+          timeSpent:
+            (currentCategory.name ? Number(timerSeconds) : DEFAULT_TIMER) -
+            countDown,
+        },
+      ])
+    }
+  }, [timesUp])
 
   useEffect(() => {
     if (!currentGame?.length) {
       dispatch(
-        fetchCustomGame({ currentCategory, difficulty, questions, type })
+        fetchCustomGame({ currentCategory, difficulty, nQuestions, type })
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +112,13 @@ const Game = () => {
 
     setEndGameStats((prev) => [
       ...prev,
-      { ...currentGame[questionIndex], chosenAnswer: option },
+      {
+        ...currentGame[questionIndex],
+        chosenAnswer: option,
+        timeSpent:
+          (currentCategory.name ? Number(timerSeconds) : DEFAULT_TIMER) -
+          countDown,
+      },
     ])
   }
 
@@ -103,7 +126,7 @@ const Game = () => {
     dispatch(emptyCurrentGame())
     currentCategory?.name
       ? dispatch(
-          fetchCustomGame({ currentCategory, difficulty, questions, type })
+          fetchCustomGame({ currentCategory, difficulty, nQuestions, type })
         )
       : dispatch(fetchQuickGame())
     setQuestionIndex(0)
@@ -179,7 +202,9 @@ const Game = () => {
                     setUserAnswer("")
                     setTimesUp(false)
                   }
-                  setTimer(30)
+                  setCountDown(
+                    currentCategory.name ? Number(timerSeconds) : DEFAULT_TIMER
+                  )
                 }}
               >
                 {currentGame.length - 1 === questionIndex
@@ -190,28 +215,31 @@ const Game = () => {
           </div>
           <section className={styles.answersMeta}>
             <div className={styles.border}></div>
+            <div className={styles.wrongAnswerNTimeBox}>
+              <h2>Correct Answers: {nRightAnswers}</h2>
+
+              {(timer === "on" || !currentCategory.name) && (
+                <h2
+                  className={`${styles.counter} ${
+                    countDown >= 1 &&
+                    countDown <=
+                      (currentCategory.name
+                        ? Math.floor(Number(timerSeconds) / 2)
+                        : DEFAULT_TIMER / 2)
+                      ? styles.timesAlmostUp
+                      : countDown <= 0 && styles.timesUp
+                  }`}
+                >
+                  {countDown ? `Time Left: ${countDown}` : "Time's up!"}
+                </h2>
+              )}
+            </div>
             <div className={styles.correctAnswerNDifficultyBox}>
-              <h2>
-                Correct Answer{nRightAnswers !== 1 && "s"}: {nRightAnswers}
-              </h2>
+              <h2>Wrong Answers: {nWrongAnswers}</h2>
               <h2>
                 Difficulty:{" "}
                 {currentGame[questionIndex]?.difficulty[0].toUpperCase() +
                   currentGame[questionIndex]?.difficulty.slice(1)}
-              </h2>
-            </div>
-            <div className={styles.wrongAnswerNTimeBox}>
-              <h2>
-                Wrong Answer{nWrongAnswers !== 1 && "s"}: {nWrongAnswers}
-              </h2>
-              <h2
-                className={`${styles.counter} ${
-                  timer <= 15 && timer > 0
-                    ? styles.timesAlmostUp
-                    : timer <= 0 && styles.timesUp
-                }`}
-              >
-                {timer ? `Time Left: ${timer}` : "Time's up!"}
               </h2>
             </div>
           </section>
@@ -223,7 +251,7 @@ const Game = () => {
             You answered {nRightAnswers}/{currentGame.length} questions
             correctly
           </h1>
-          {!nWrongAnswers && (
+          {!nWrongAnswers && nRightAnswers === currentGame.length && (
             <>
               <ReactConfetti
                 width={width}
@@ -257,18 +285,40 @@ const Game = () => {
                 <div className={styles.endGameAnswer} key={answer.question}>
                   <p>{he.decode(answer.question)}</p>
                   <div>
-                    <p
-                      className={
-                        answer.correct_answer === answer.chosenAnswer
-                          ? styles.correctAnswer
-                          : styles.wrongAnswer
-                      }
-                    >
-                      Your Answer: {he.decode(answer.chosenAnswer || "")}
-                    </p>
+                    {answer.chosenAnswer ? (
+                      <p
+                        className={
+                          answer.correct_answer === answer.chosenAnswer
+                            ? styles.correctAnswer
+                            : styles.wrongAnswer
+                        }
+                      >
+                        Your Answer: {he.decode(answer.chosenAnswer)}
+                      </p>
+                    ) : (
+                      <p className={styles.wrongAnswer}>Time Ran Out!</p>
+                    )}
                     {answer.correct_answer !== answer.chosenAnswer && (
                       <p>Correct Answer: {he.decode(answer.correct_answer)}</p>
                     )}
+                    <div className={styles.categoryNTimeBox}>
+                      <p>
+                        {he.decode(
+                          /:/.test(answer.category)
+                            ? answer.category.slice(
+                                answer.category.indexOf(":") + 2
+                              )
+                            : answer.category
+                        )}
+                      </p>
+                      {(timer === "on" || !currentCategory.name) && <p>
+                        {answer.timeSpent}/
+                        {currentCategory.name
+                          ? Number(timerSeconds)
+                          : DEFAULT_TIMER}
+                        {" "}Seconds Passed
+                      </p>}
+                    </div>
                   </div>
                 </div>
               )

@@ -5,7 +5,7 @@ export const getGame = async (payload: Settings) => {
   const type = payload.type === "random" ? "" : `&type=${payload.type}`
   return (
     await fetch(
-      `https://opentdb.com/api.php?amount=${payload.questions}&category=${payload.currentCategory.id}${difficulty}${type}`
+      `https://opentdb.com/api.php?amount=${payload.nQuestions}&category=${payload.currentCategory.id}${difficulty}${type}`
     )
   ).json()
 }

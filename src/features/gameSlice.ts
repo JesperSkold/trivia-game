@@ -35,8 +35,10 @@ interface InitState {
 
   currentCategory: TriviaCategory
   difficulty: string
-  questions: string
+  nQuestions: string
   type: string
+  timer: string
+  timerSeconds: string
   step: number
 
   currentGame: IGame[]
@@ -55,8 +57,10 @@ const initialState: InitState = {
 
   currentCategory: { name: "", id: 0 },
   difficulty: "random",
-  questions: "5",
+  nQuestions: "5",
   type: "random",
+  timer: "on",
+  timerSeconds: "30",
   step: 0,
 
   currentGame: [],
@@ -79,9 +83,14 @@ export const gameSlice = createSlice({
       state.difficulty = action.payload
       console.log(state.difficulty)
     },
-    setQuestions: (state, action) => {
-      state.questions = action.payload
-      console.log(state.questions)
+    setNQuestions: (state, action) => {
+      state.nQuestions = action.payload
+    },
+    setTimerSeconds: (state, action) => {
+      state.timerSeconds = action.payload
+    },
+    setTimer: (state, action) => {
+      state.timer = action.payload
     },
     setType: (state, action) => {
       state.type = action.payload
@@ -155,6 +164,7 @@ export const gameSlice = createSlice({
 
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
+      state.currentCategory.id = -1
       state.currentGame = action.payload.results
       state.responseCode = action.payload.response_code
       state.step = 2
@@ -166,7 +176,9 @@ export const gameSlice = createSlice({
 export const {
   setCurrentCategory,
   setDifficulty,
-  setQuestions,
+  setNQuestions,
+  setTimerSeconds,
+  setTimer,
   setType,
   startGame,
   resetGame,
