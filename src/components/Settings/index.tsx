@@ -5,18 +5,25 @@ import {
   setDifficulty,
   setType,
   setNQuestions,
-  startGame,
   setTimerSeconds,
   setTimer,
+  fetchCustomGame,
 } from "../../features/gameSlice"
 import BackBtn from "../BackBtn"
+import Loader from "../Loader"
 import styles from "./style.module.scss"
 
 const Settings = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { difficulty, nQuestions, type, timer, timerSeconds } = useSelector(
-    (state: RootState) => state.game
-  )
+  const {
+    currentCategory,
+    difficulty,
+    nQuestions,
+    type,
+    timer,
+    timerSeconds,
+    loadingCustomGame,
+  } = useSelector((state: RootState) => state.game)
   const [inputNQuestions, setInputNQuestions] = useState<string>(nQuestions)
   const [inputTimerSeconds, setInputTimerSeconds] =
     useState<string>(timerSeconds)
@@ -114,7 +121,21 @@ const Settings = () => {
           />
         </div>
       )}
-      {<button onClick={() => dispatch(startGame())}>Start Game!</button>}
+      {loadingCustomGame === "pending" ? (
+        <div className={styles.loaderContainer}>
+          <Loader />
+        </div>
+      ) : (
+        <button
+          onClick={() =>
+            dispatch(
+              fetchCustomGame({ currentCategory, difficulty, nQuestions, type })
+            )
+          }
+        >
+          Start Game!
+        </button>
+      )}
     </div>
   )
 }

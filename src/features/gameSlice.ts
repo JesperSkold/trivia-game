@@ -32,6 +32,7 @@ interface InitState {
   singleCategory: TriviaCategory[]
   multiCategory: TriviaCategory[]
   multiCategoryTitle: string[]
+  gameRecapAnswers: IGame[]
 
   currentCategory: TriviaCategory
   difficulty: string
@@ -39,7 +40,9 @@ interface InitState {
   type: string
   timer: string
   timerSeconds: string
+  timesUp: boolean
   step: number
+  showRecap: boolean
 
   currentGame: IGame[]
   responseCode: number
@@ -54,6 +57,7 @@ const initialState: InitState = {
   singleCategory: [],
   multiCategory: [],
   multiCategoryTitle: [],
+  gameRecapAnswers: [],
 
   currentCategory: { name: "", id: 0 },
   difficulty: "random",
@@ -61,7 +65,9 @@ const initialState: InitState = {
   type: "random",
   timer: "on",
   timerSeconds: "30",
+  timesUp: false,
   step: 0,
+  showRecap: false,
 
   currentGame: [],
   responseCode: 0,
@@ -79,9 +85,15 @@ export const gameSlice = createSlice({
       state.currentCategory = action.payload
       state.step = 1
     },
+    addToGameRecapAnswers: (state, action) => {
+      state.gameRecapAnswers.push({
+        ...action.payload.gameMeta,
+        chosenAnswer: action.payload.chosenAnswer,
+        timeSpent: action.payload.timeSpent,
+      })
+    },
     setDifficulty: (state, action) => {
       state.difficulty = action.payload
-      console.log(state.difficulty)
     },
     setNQuestions: (state, action) => {
       state.nQuestions = action.payload
@@ -92,11 +104,14 @@ export const gameSlice = createSlice({
     setTimer: (state, action) => {
       state.timer = action.payload
     },
+    setTimesUp: (state, action) => {
+      state.timesUp = action.payload
+    },
     setType: (state, action) => {
       state.type = action.payload
     },
-    startGame: (state) => {
-      state.step = 2
+    setShowRecap: (state, action) => {
+      state.showRecap = action.payload
     },
     resetGame: (state) => {
       state.step = 0
@@ -156,19 +171,27 @@ export const gameSlice = createSlice({
 
       state.loadingCategories = "succeeded"
     })
+
     builder.addCase(fetchCustomGame.fulfilled, (state, action) => {
-        state.currentGame = action.payload.results
-        state.responseCode = action.payload.response_code
-        state.loadingCustomGame = "succeeded"
+      state.gameRecapAnswers = []
+      state.currentGame = action.payload.results
+      state.responseCode = action.payload.response_code
+      state.loadingCustomGame = "succeeded"
+      state.step = 2
+      state.showRecap = false
+      state.timesUp = false
     })
 
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
       state.currentCategory.id = -1
+      state.gameRecapAnswers = []
       state.currentGame = action.payload.results
       state.responseCode = action.payload.response_code
-      state.step = 2
       state.loadingQuickGame = "succeeded"
+      state.step = 2
+      state.showRecap = false
+      state.timesUp = false
     })
   },
 })
@@ -179,11 +202,13 @@ export const {
   setNQuestions,
   setTimerSeconds,
   setTimer,
+  setTimesUp,
   setType,
-  startGame,
+  setShowRecap,
   resetGame,
   goBack,
   emptyCurrentGame,
+  addToGameRecapAnswers,
 } = gameSlice.actions
 
 export default gameSlice.reducer
