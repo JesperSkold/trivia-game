@@ -133,9 +133,6 @@ export const gameSlice = createSlice({
         }
       }
     },
-    emptyCurrentGame: (state) => {
-      state.currentGame = []
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.pending, (state) => {
@@ -215,7 +212,6 @@ export const {
   setShowRecap,
   resetGame,
   goBack,
-  emptyCurrentGame,
   addToGameRecapAnswers,
 } = gameSlice.actions
 
