@@ -24,6 +24,7 @@ const Game = () => {
     showRecap,
     difficulty,
     nQuestions,
+    gameRecapAnswers,
     nRightAnswers,
     type,
     timer,
@@ -64,7 +65,7 @@ const Game = () => {
   }, [countDown])
 
   useEffect(() => {
-    if (timesUp) {
+    if (timesUp && gameRecapAnswers.length !== currentGame.length) {
       setNWrongAnswers((prev) => prev + 1)
       dispatch(
         addToGameRecapAnswers({
@@ -189,6 +190,7 @@ const Game = () => {
                       setUserAnswer("")
                       dispatch(setTimesUp(false))
                     } else {
+                      dispatch(setTimesUp(true))
                       dispatch(setShowRecap(true))
                     }
                     setCountDown(
