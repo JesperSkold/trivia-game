@@ -5,12 +5,7 @@
   text-align: center;
 
   h1 {
-    margin-right: 20px;
     margin-top: 0;
-  }
-
-  h2 {
-    margin-right: 20px;
   }
 
   .buttonContainer {
@@ -18,7 +13,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
-    margin-right: 20px;
 
     button {
       width: 270px;
@@ -31,7 +25,6 @@
   }
 
   .gameRecapAnswersBox {
-    scrollbar-gutter: stable;
     overflow-x: hidden;
     flex: 1;
     overflow-y: auto;
