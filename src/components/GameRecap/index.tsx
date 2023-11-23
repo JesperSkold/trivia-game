@@ -14,11 +14,7 @@ interface Props {
   restartGame: () => void
 }
 
-const GameRecap = ({
-  nWrongAnswers,
-  DEFAULT_TIMER,
-  restartGame,
-}: Props) => {
+const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
   const {
     currentGame,
     currentCategory,
@@ -33,7 +29,7 @@ const GameRecap = ({
   const dispatch = useDispatch()
 
   return (
-    <div className={styles.endGame}>
+    <div className={styles.gameRecap}>
       <h1>
         You answered {nRightAnswers}/{currentGame.length} questions correctly
       </h1>
@@ -68,10 +64,20 @@ const GameRecap = ({
         </button>
       </div>
       <h2>Answers:</h2>
-      <div className={styles.endGameAnswersBox}>
+      <div className={styles.gameRecapAnswersBox}>
         {gameRecapAnswers.map((answer) => {
           return (
-            <div className={styles.endGameAnswer} key={answer.question}>
+            <div className={styles.answer} key={answer.question}>
+              <div className={styles.categoryContainer}>
+                <p>
+                  {he.decode(
+                    /:/.test(answer.category)
+                      ? answer.category.slice(answer.category.indexOf(":") + 2)
+                      : answer.category
+                  )}
+                </p>
+              </div>
+              <div className={styles.border}></div>
               <p>{he.decode(answer.question)}</p>
               <div>
                 {answer.chosenAnswer ? (
@@ -90,25 +96,33 @@ const GameRecap = ({
                 {answer.correct_answer !== answer.chosenAnswer && (
                   <p>Correct Answer: {he.decode(answer.correct_answer)}</p>
                 )}
-                <div className={styles.categoryTimeBox}>
-                  <p>
-                    {he.decode(
-                      /:/.test(answer.category)
-                        ? answer.category.slice(
-                            answer.category.indexOf(":") + 2
-                          )
-                        : answer.category
-                    )}
-                  </p>
-                  {(timer === "on" || !currentCategory.name) && (
-                    <p>
-                      {answer.timeSpent}/
-                      {currentCategory.name
-                        ? Number(timerSeconds)
-                        : DEFAULT_TIMER}{" "}
-                      Seconds Passed
-                    </p>
-                  )}
+                <div className={styles.cardRecapFooter}>
+                  <div className={styles.border}></div>
+                  <div>
+                    <div
+                      className={styles.difficultySecondsContainer}
+                      style={{
+                        justifyContent:
+                          timer === "on" || !currentCategory.name
+                            ? "space-between"
+                            : "center",
+                      }}
+                    >
+                      <p>
+                        {answer.difficulty[0].toUpperCase() +
+                          answer.difficulty.slice(1)}
+                      </p>
+                      {(timer === "on" || !currentCategory.name) && (
+                        <p>
+                          {answer.timeSpent}/
+                          {currentCategory.name
+                            ? Number(timerSeconds)
+                            : DEFAULT_TIMER}{" "}
+                          Seconds Passed
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
