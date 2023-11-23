@@ -9,18 +9,14 @@ import styles from "./style.module.scss"
 import { resetGame } from "../../features/gameSlice"
 
 interface Props {
-  nRightAnswers: number
   nWrongAnswers: number
   DEFAULT_TIMER: number
-  setUserAnswer: React.Dispatch<React.SetStateAction<string>>
   restartGame: () => void
 }
 
 const GameRecap = ({
-  nRightAnswers,
   nWrongAnswers,
   DEFAULT_TIMER,
-  setUserAnswer,
   restartGame,
 }: Props) => {
   const {
@@ -28,6 +24,7 @@ const GameRecap = ({
     currentCategory,
     loadingCustomGame,
     loadingQuickGame,
+    nRightAnswers,
     timer,
     timerSeconds,
     gameRecapAnswers,

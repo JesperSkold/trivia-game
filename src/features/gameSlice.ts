@@ -32,8 +32,7 @@ interface InitState {
   singleCategory: TriviaCategory[]
   multiCategory: TriviaCategory[]
   multiCategoryTitle: string[]
-  gameRecapAnswers: IGame[]
-
+  
   currentCategory: TriviaCategory
   difficulty: string
   nQuestions: string
@@ -43,8 +42,10 @@ interface InitState {
   timesUp: boolean
   step: number
   showRecap: boolean
-
+  
   currentGame: IGame[]
+  nRightAnswers: number
+  gameRecapAnswers: IGame[]
   responseCode: number
 
   loadingCategories: LoadingState
@@ -57,8 +58,7 @@ const initialState: InitState = {
   singleCategory: [],
   multiCategory: [],
   multiCategoryTitle: [],
-  gameRecapAnswers: [],
-
+  
   currentCategory: { name: "", id: 0 },
   difficulty: "random",
   nQuestions: "5",
@@ -68,8 +68,10 @@ const initialState: InitState = {
   timesUp: false,
   step: 0,
   showRecap: false,
-
+  
   currentGame: [],
+  nRightAnswers: 0,
+  gameRecapAnswers: [],
   responseCode: 0,
 
   loadingCategories: "idle",
@@ -109,6 +111,9 @@ export const gameSlice = createSlice({
     },
     setType: (state, action) => {
       state.type = action.payload
+    },
+    setNRightAnswers: (state) => {
+      state.nRightAnswers += 1
     },
     setShowRecap: (state, action) => {
       state.showRecap = action.payload
@@ -180,8 +185,9 @@ export const gameSlice = createSlice({
       state.step = 2
       state.showRecap = false
       state.timesUp = false
+      state.nRightAnswers = 0
     })
-
+    
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
       state.currentCategory.id = -1
@@ -192,6 +198,7 @@ export const gameSlice = createSlice({
       state.step = 2
       state.showRecap = false
       state.timesUp = false
+      state.nRightAnswers = 0
     })
   },
 })
@@ -204,6 +211,7 @@ export const {
   setTimer,
   setTimesUp,
   setType,
+  setNRightAnswers,
   setShowRecap,
   resetGame,
   goBack,

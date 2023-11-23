@@ -7,6 +7,7 @@ import {
   setShowRecap,
   addToGameRecapAnswers,
   setTimesUp,
+  setNRightAnswers,
 } from "../../features/gameSlice"
 import BackBtn from "../BackBtn"
 import GameRecap from "../GameRecap"
@@ -23,12 +24,12 @@ const Game = () => {
     showRecap,
     difficulty,
     nQuestions,
+    nRightAnswers,
     type,
     timer,
     timesUp,
     timerSeconds,
   } = useSelector((state: RootState) => state.game)
-  const [nRightAnswers, setNRightAnswers] = useState<number>(0)
   const [nWrongAnswers, setNWrongAnswers] = useState<number>(0)
   const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [countDown, setCountDown] = useState<number>(
@@ -96,10 +97,11 @@ const Game = () => {
     setUserAnswer(option)
 
     if (option === currentGame[questionIndex]?.correct_answer) {
-      setNRightAnswers((prev) => prev + 1)
+      dispatch(setNRightAnswers())
     } else {
       setNWrongAnswers((prev) => prev + 1)
     }
+
     dispatch(
       addToGameRecapAnswers({
         gameMeta: currentGame[questionIndex],
@@ -118,7 +120,6 @@ const Game = () => {
         )
       : dispatch(fetchQuickGame())
     setQuestionIndex(0)
-    setNRightAnswers(0)
     setNWrongAnswers(0)
     setUserAnswer("")
   }
@@ -238,9 +239,7 @@ const Game = () => {
       </div>
       {showRecap && (
         <GameRecap
-          nRightAnswers={nRightAnswers}
           nWrongAnswers={nWrongAnswers}
-          setUserAnswer={setUserAnswer}
           restartGame={restartGame}
           DEFAULT_TIMER={DEFAULT_TIMER}
         />
