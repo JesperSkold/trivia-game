@@ -49,7 +49,9 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
         )}
       <div className={styles.buttonContainer}>
         {loadingCustomGame === "pending" || loadingQuickGame === "pending" ? (
+          <div className={styles.loaderContainer}>
           <Loader />
+          </div>
         ) : (
           <button
             onClick={() => {

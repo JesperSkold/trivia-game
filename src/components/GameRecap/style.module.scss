@@ -19,6 +19,15 @@
     justify-content: center;
     gap: 16px;
     margin-right: 20px;
+
+    button {
+      width: 270px;
+    }
+  }
+
+  .loaderContainer {
+    min-height: 50px;
+    width: 270px;
   }
 
   .gameRecapAnswersBox {
