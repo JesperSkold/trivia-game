@@ -115,7 +115,7 @@ const Game = () => {
   }
 
   const restartGame = () => {
-    currentCategory?.name
+    currentCategory.name
       ? dispatch(
           fetchCustomGame({ currentCategory, difficulty, nQuestions, type })
         )

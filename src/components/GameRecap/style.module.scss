@@ -5,6 +5,7 @@
   text-align: center;
 
   h1 {
+    margin-right: 20px;
     margin-top: 0;
   }
 
@@ -17,11 +18,11 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-right: 20px;
   }
 
   .gameRecapAnswersBox {
+    scrollbar-gutter: stable;
     overflow-x: hidden;
     flex: 1;
     overflow-y: auto;
@@ -41,7 +42,7 @@
       background-color: #427d9d;
       margin-bottom: 16px;
 
-      @media screen and (max-width: 440px) {
+      @media screen and (max-width: 470px) {
         width: 280px;
         margin: 4px 8px;
       }
