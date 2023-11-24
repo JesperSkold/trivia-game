@@ -7,6 +7,7 @@ This trivia web application leverages responsive web design principles, ensuring
 ## Links
 
 - [Deployed Site](<https://trivianado.netlify.app> "https://trivianado.netlify.app")
+- [Open Trivia DB](<https://opentdb.com/api_config.php> "https://opentdb.com/api_config.php")
 
 ## Screenshots
 
@@ -25,9 +26,6 @@ This trivia web application leverages responsive web design principles, ensuring
 - Redux Toolkit
 - Redux Thunk
 - HTML & SCSS
-
-### API Used:
-- [Open Trivia DB](<opentdb.com/api_config.php> "opentdb.com/api_config.php")
 
 ## Author
 
