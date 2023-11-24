@@ -2,7 +2,7 @@
 
 ## Description
 
-This trivia web application leverages responsive web design principles, ensuring an optimal user experience across various devices. The architecture incorporates custom game settings, enabling users to personalize their gaming experiences. With robust functionality for quick game modes and a comprehensive recap feature, this app is designed to offer a seamless trivia exploration. Built with a focus on scalability and performance, it utilizes modern web technologies to deliver an interactive and dynamic platform.
+This trivia web application utilizes the Open Trivia DB API and leverages responsive web design principles, ensuring an optimal user experience across various devices. The architecture incorporates custom game settings, enabling users to personalize their gaming experiences. With robust functionality for quick game modes and a comprehensive recap feature, this app is designed to offer a seamless trivia exploration. Built with a focus on scalability and performance, it utilizes modern web technologies to deliver an interactive and dynamic platform.
 
 ## Links
 
