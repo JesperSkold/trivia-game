@@ -26,7 +26,7 @@ const CategoryList = () => {
   }, [dispatch])
 
   return (
-    <div className={styles.categoryList}>
+    <main className={styles.categoryList}>
       <h1 className={styles.title}>Welcome to Trivianado</h1>
       {loadingCategories === "pending" ? (
         <Loader />
@@ -45,7 +45,7 @@ const CategoryList = () => {
           )}
           <section className={styles.categoryContainer}>
             <h3>Alternatively, to customize your game, pick a category:</h3>
-            <h1>General Categories</h1>
+            <h2>General Categories</h2>
             <div>
               {singleCategory.map((category) => (
                 <Category
@@ -59,7 +59,7 @@ const CategoryList = () => {
           <section className={styles.categoryContainer}>
             {multiCategoryTitle.map((category) => (
               <React.Fragment key={category}>
-                <h1>{category}</h1>
+                <h2>{category}</h2>
                 <div>
                   {multiCategory?.map(
                     (cat: TriviaCategory) =>
@@ -78,7 +78,7 @@ const CategoryList = () => {
           </section>
         </>
       )}
-    </div>
+    </main>
   )
 }
 export default CategoryList

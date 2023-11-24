@@ -29,7 +29,7 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
   const dispatch = useDispatch()
 
   return (
-    <div className={styles.gameRecap}>
+    <main className={styles.gameRecap}>
       <h1>
         You answered {nRightAnswers}/{currentGame.length} questions correctly
       </h1>
@@ -66,10 +66,10 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
         </button>
       </div>
       <h2>Answers:</h2>
-      <div className={styles.gameRecapAnswersBox}>
+      <section className={styles.gameRecapAnswersBox}>
         {gameRecapAnswers.map((answer) => {
           return (
-            <div className={styles.answer} key={answer.question}>
+            <article className={styles.answer} key={answer.question}>
               <div className={styles.categoryContainer}>
                 <p>
                   {he.decode(
@@ -127,11 +127,11 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
                   </div>
                 </div>
               </div>
-            </div>
+            </article>
           )
         })}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
 

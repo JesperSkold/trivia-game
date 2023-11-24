@@ -53,7 +53,7 @@ const Settings = () => {
   }
 
   return (
-    <div className={styles.settingsContainer}>
+    <main className={styles.settingsContainer}>
       <div className={styles.titleContainer}>
         <BackBtn />
         <h1>Settings</h1>
@@ -136,7 +136,7 @@ const Settings = () => {
           Start Game!
         </button>
       )}
-    </div>
+    </main>
   )
 }
 

@@ -130,7 +130,7 @@ const Game = () => {
       <div>
         {!showRecap && currentGame.length > 0 && (
           <div className={styles.gameContainer}>
-            <div className={styles.header}>
+            <header className={styles.header}>
               <BackBtn />
               <h2 className={styles.categoryName}>
                 {he.decode(
@@ -144,9 +144,9 @@ const Game = () => {
               <h2>
                 {questionIndex + 1}/{currentGame.length}
               </h2>
-            </div>
+            </header>
             <div className={styles.border}></div>
-            <div className={styles.questionContainer}>
+            <main className={styles.questionContainer}>
               <div className={styles.question}>
                 <h1>{he.decode(currentGame[questionIndex]?.question)}</h1>
               </div>
@@ -205,8 +205,8 @@ const Game = () => {
                     : "Next Question"}
                 </button>
               )}
-            </div>
-            <section className={styles.answersMeta}>
+            </main>
+            <footer className={styles.answersMeta}>
               <div className={styles.border}></div>
               <div className={styles.wrongAnswerNTimeBox}>
                 <h2>Correct Answers: {nRightAnswers}</h2>
@@ -235,7 +235,7 @@ const Game = () => {
                     currentGame[questionIndex]?.difficulty.slice(1)}
                 </h2>
               </div>
-            </section>
+            </footer>
           </div>
         )}
       </div>
