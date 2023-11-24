@@ -45,6 +45,7 @@ interface InitState {
   
   currentGame: IGame[]
   nRightAnswers: number
+  nWrongAnswers: number
   gameRecapAnswers: IGame[]
   responseCode: number
 
@@ -71,6 +72,7 @@ const initialState: InitState = {
   
   currentGame: [],
   nRightAnswers: 0,
+  nWrongAnswers: 0,
   gameRecapAnswers: [],
   responseCode: 0,
 
@@ -114,6 +116,9 @@ export const gameSlice = createSlice({
     },
     setNRightAnswers: (state) => {
       state.nRightAnswers += 1
+    },
+    setNWrongAnswers: (state) => {
+      state.nWrongAnswers += 1
     },
     setShowRecap: (state, action) => {
       state.showRecap = action.payload
@@ -183,6 +188,7 @@ export const gameSlice = createSlice({
       state.showRecap = false
       state.timesUp = false
       state.nRightAnswers = 0
+      state.nWrongAnswers = 0
     })
     
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
@@ -196,6 +202,7 @@ export const gameSlice = createSlice({
       state.showRecap = false
       state.timesUp = false
       state.nRightAnswers = 0
+      state.nWrongAnswers = 0
     })
   },
 })
@@ -209,6 +216,7 @@ export const {
   setTimesUp,
   setType,
   setNRightAnswers,
+  setNWrongAnswers,
   setShowRecap,
   resetGame,
   goBack,
