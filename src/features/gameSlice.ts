@@ -123,9 +123,17 @@ export const gameSlice = createSlice({
     setShowRecap: (state, action) => {
       state.showRecap = action.payload
     },
-    resetGame: (state) => {
+    resetStep: (state) => {
       state.step = 0
       state.currentGame = []
+    },
+    resetGameData: (state) => {
+      state.gameRecapAnswers = []
+      state.step = 2
+      state.showRecap = false
+      state.timesUp = false
+      state.nRightAnswers = 0
+      state.nWrongAnswers = 0
     },
     goBack: (state) => {
       if (state.step > 0) {
@@ -180,29 +188,19 @@ export const gameSlice = createSlice({
     })
 
     builder.addCase(fetchCustomGame.fulfilled, (state, action) => {
-      state.gameRecapAnswers = []
       state.currentGame = action.payload.results
       state.responseCode = action.payload.response_code
       state.loadingCustomGame = "succeeded"
-      state.step = 2
-      state.showRecap = false
-      state.timesUp = false
-      state.nRightAnswers = 0
-      state.nWrongAnswers = 0
+      gameSlice.caseReducers.resetGameData(state)
     })
     
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
       state.currentCategory.id = -1
-      state.gameRecapAnswers = []
       state.currentGame = action.payload.results
       state.responseCode = action.payload.response_code
       state.loadingQuickGame = "succeeded"
-      state.step = 2
-      state.showRecap = false
-      state.timesUp = false
-      state.nRightAnswers = 0
-      state.nWrongAnswers = 0
+      gameSlice.caseReducers.resetGameData(state)
     })
   },
 })
@@ -218,7 +216,7 @@ export const {
   setNRightAnswers,
   setNWrongAnswers,
   setShowRecap,
-  resetGame,
+  resetStep,
   goBack,
   addToGameRecapAnswers,
 } = gameSlice.actions

@@ -6,7 +6,7 @@ import ReactConfetti from "react-confetti"
 import he from "he"
 import Loader from "../Loader"
 import styles from "./style.module.scss"
-import { resetGame } from "../../features/gameSlice"
+import { resetStep } from "../../features/gameSlice"
 
 interface Props {
   nWrongAnswers: number
@@ -61,7 +61,7 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
             Restart Game with the Same Settings
           </button>
         )}
-        <button onClick={() => dispatch(resetGame())}>
+        <button onClick={() => dispatch(resetStep())}>
           Change Category and Settings
         </button>
       </div>
