@@ -5,6 +5,9 @@ import { getQuickGame } from "../api/getQuickGame"
 import { TriviaCategory, TriviaCategories } from "../interface/category"
 import { Settings } from "../interface/settings"
 import { IGame } from "../interface/game"
+import { getSessionToken } from "../api/getSessionToken"
+import { RootState } from "../store/store"
+import { resetSessionToken } from "../api/resetSessionToken"
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
@@ -12,16 +15,38 @@ export const fetchCategories = createAsyncThunk(
     return await getCategories()
   }
 )
+
 export const fetchCustomGame = createAsyncThunk(
   "game/fetchGame",
-  async (settings: Settings) => {
-    return await getGame(settings)
+  async (settings: Settings, { getState }) => {
+    const state = getState() as RootState
+    const sessionToken = state.game.sessionToken
+    return await getGame(settings, sessionToken)
   }
 )
+
 export const fetchQuickGame = createAsyncThunk(
   "game/fetchQuickGame",
+  async (_, { getState }) => {
+    const state = getState() as RootState
+    const sessionToken = state.game.sessionToken
+    return await getQuickGame(sessionToken)
+  }
+)
+
+export const fetchSessionToken = createAsyncThunk(
+  "game/fetchSessionToken",
   async () => {
-    return await getQuickGame()
+    return await getSessionToken()
+  }
+)
+
+export const fetchResetSessionToken = createAsyncThunk(
+  "game/fetchResetSessionToken",
+  async (_, { getState }) => {
+    const state = getState() as RootState
+    const sessionToken = state.game.sessionToken
+    return await resetSessionToken(sessionToken)
   }
 )
 
@@ -32,7 +57,7 @@ interface InitState {
   singleCategory: TriviaCategory[]
   multiCategory: TriviaCategory[]
   multiCategoryTitle: string[]
-  
+
   currentCategory: TriviaCategory
   difficulty: string
   nQuestions: string
@@ -42,7 +67,7 @@ interface InitState {
   timesUp: boolean
   step: number
   showRecap: boolean
-  
+
   currentGame: IGame[]
   nRightAnswers: number
   nWrongAnswers: number
@@ -52,6 +77,7 @@ interface InitState {
   loadingCategories: LoadingState
   loadingCustomGame: LoadingState
   loadingQuickGame: LoadingState
+  sessionToken: string
 }
 
 const initialState: InitState = {
@@ -59,7 +85,7 @@ const initialState: InitState = {
   singleCategory: [],
   multiCategory: [],
   multiCategoryTitle: [],
-  
+
   currentCategory: { name: "", id: 0 },
   difficulty: "random",
   nQuestions: "5",
@@ -69,7 +95,7 @@ const initialState: InitState = {
   timesUp: false,
   step: 0,
   showRecap: false,
-  
+
   currentGame: [],
   nRightAnswers: 0,
   nWrongAnswers: 0,
@@ -79,6 +105,7 @@ const initialState: InitState = {
   loadingCategories: "idle",
   loadingCustomGame: "idle",
   loadingQuickGame: "idle",
+  sessionToken: "",
 }
 
 export const gameSlice = createSlice({
@@ -193,7 +220,7 @@ export const gameSlice = createSlice({
       state.loadingCustomGame = "succeeded"
       gameSlice.caseReducers.resetGameData(state)
     })
-    
+
     builder.addCase(fetchQuickGame.fulfilled, (state, action) => {
       state.currentCategory.name = ""
       state.currentCategory.id = -1
@@ -201,6 +228,15 @@ export const gameSlice = createSlice({
       state.responseCode = action.payload.response_code
       state.loadingQuickGame = "succeeded"
       gameSlice.caseReducers.resetGameData(state)
+    })
+
+    builder.addCase(fetchSessionToken.fulfilled, (state, action) => {
+      state.responseCode = action.payload.response_code
+      state.sessionToken = action.payload.token
+    })
+
+    builder.addCase(fetchResetSessionToken.fulfilled, (state, action) => {
+      state.sessionToken = action.payload.token
     })
   },
 })
