@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import {
@@ -8,6 +8,7 @@ import {
   setTimerSeconds,
   setTimer,
   fetchCustomGame,
+  fetchCategoryQuestionCount,
 } from "../../features/gameSlice"
 import BackBtn from "../BackBtn"
 import Loader from "../Loader"
@@ -23,10 +24,17 @@ const Settings = () => {
     timer,
     timerSeconds,
     loadingCustomGame,
+    loadingCategoryCount,
+    categoryQuestionCount,
   } = useSelector((state: RootState) => state.game)
   const [inputNQuestions, setInputNQuestions] = useState<string>(nQuestions)
   const [inputTimerSeconds, setInputTimerSeconds] =
     useState<string>(timerSeconds)
+
+  useEffect(() => {
+    dispatch(fetchCategoryQuestionCount(currentCategory.id))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const numberHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -59,6 +67,26 @@ const Settings = () => {
         <h1>Settings</h1>
         <div></div>
       </div>
+      {loadingCategoryCount === "pending" ? (
+        <div className={styles.loaderContainer}>
+          <Loader />
+        </div>
+      ) : (
+        <div className={styles.categoryMeta}>
+          <h2>{currentCategory.name}</h2>
+          <h3>Total Questions: {categoryQuestionCount.total_question_count}</h3>
+          <p>
+            Easy Questions: {categoryQuestionCount.total_easy_question_count}
+          </p>
+          <p>
+            Medium Questions:{" "}
+            {categoryQuestionCount.total_medium_question_count}
+          </p>
+          <p>
+            Hard Questions: {categoryQuestionCount.total_hard_question_count}
+          </p>
+        </div>
+      )}
       <div>
         <label>Number of questions (1-50)</label>
         <input
@@ -122,7 +150,7 @@ const Settings = () => {
         </div>
       )}
       {loadingCustomGame === "pending" ? (
-        <div className={styles.loaderContainer}>
+        <div className={styles.loaderContainerBtn}>
           <Loader />
         </div>
       ) : (

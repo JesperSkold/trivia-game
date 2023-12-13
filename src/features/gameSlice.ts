@@ -2,17 +2,29 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getCategories } from "../api/getCategories"
 import { getGame } from "../api/getCustomGame"
 import { getQuickGame } from "../api/getQuickGame"
-import { TriviaCategory, TriviaCategories } from "../interface/category"
+import {
+  TriviaCategory,
+  TriviaCategories,
+  CategoryQuestionCount,
+} from "../interface/category"
 import { Settings } from "../interface/settings"
 import { IGame } from "../interface/game"
 import { getSessionToken } from "../api/getSessionToken"
 import { RootState } from "../store/store"
 import { resetSessionToken } from "../api/resetSessionToken"
+import { getCategoryQuestionCount } from "../api/getCategoryQuestionCount"
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async () => {
     return await getCategories()
+  }
+)
+
+export const fetchCategoryQuestionCount = createAsyncThunk(
+  "categories/fetchCategoryQuestionCount",
+  async (categoryID: number) => {
+    return await getCategoryQuestionCount(categoryID)
   }
 )
 
@@ -59,6 +71,7 @@ interface InitState {
   multiCategoryTitle: string[]
 
   currentCategory: TriviaCategory
+  categoryQuestionCount: CategoryQuestionCount
   difficulty: string
   nQuestions: string
   type: string
@@ -77,6 +90,7 @@ interface InitState {
   loadingCategories: LoadingState
   loadingCustomGame: LoadingState
   loadingQuickGame: LoadingState
+  loadingCategoryCount: LoadingState
   sessionToken: string
 }
 
@@ -87,6 +101,12 @@ const initialState: InitState = {
   multiCategoryTitle: [],
 
   currentCategory: { name: "", id: 0 },
+  categoryQuestionCount: {
+    total_question_count: 0,
+    total_easy_question_count: 0,
+    total_medium_question_count: 0,
+    total_hard_question_count: 0,
+  },
   difficulty: "random",
   nQuestions: "5",
   type: "random",
@@ -105,6 +125,7 @@ const initialState: InitState = {
   loadingCategories: "idle",
   loadingCustomGame: "idle",
   loadingQuickGame: "idle",
+  loadingCategoryCount: "idle",
   sessionToken: "",
 }
 
@@ -184,6 +205,9 @@ export const gameSlice = createSlice({
     builder.addCase(fetchCustomGame.pending, (state) => {
       state.loadingCustomGame = "pending"
     })
+    builder.addCase(fetchCategoryQuestionCount.pending, (state) => {
+      state.loadingCategoryCount = "pending"
+    })
     builder.addCase(fetchCategories.rejected, (state) => {
       state.loadingCategories = "rejected"
     })
@@ -228,6 +252,11 @@ export const gameSlice = createSlice({
       state.responseCode = action.payload.response_code
       state.loadingQuickGame = "succeeded"
       gameSlice.caseReducers.resetGameData(state)
+    })
+
+    builder.addCase(fetchCategoryQuestionCount.fulfilled, (state, action) => {
+      state.categoryQuestionCount = action.payload.category_question_count
+      state.loadingCategoryCount = "succeeded"
     })
 
     builder.addCase(fetchSessionToken.fulfilled, (state, action) => {

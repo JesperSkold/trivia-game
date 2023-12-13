@@ -21,6 +21,35 @@
     }
   }
 
+  .loaderContainer {
+    height: 172px;
+    display: flex;
+    justify-content: center;
+
+    @media screen and (max-width: 700px) {
+      height: 146px;
+    }
+  }
+
+  .loaderContainerBtn {
+    display: flex;
+    justify-content: center;
+    height: 1px;
+  }
+
+  .categoryMeta {
+    text-align: center;
+    background-color: var(--tertiary-color);
+    padding: 16px;
+    border-radius: 16px;
+    p,
+    h2,
+    h3 {
+      margin: 2px;
+      color: #333333;
+    }
+  }
+
   select,
   input {
     min-width: 210px;
