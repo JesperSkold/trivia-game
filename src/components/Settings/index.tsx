@@ -52,7 +52,7 @@ const Settings = () => {
     } else if (field === "timerField") {
       if (
         e.target.value === "" ||
-        (Number(e.target.value) >= 1 && Number(e.target.value) <= 60)
+        (Number(e.target.value) >= 1 && Number(e.target.value) <= 180)
       ) {
         setInputTimerSeconds(cleanedValue)
         dispatch(setTimerSeconds(cleanedValue || 30))
@@ -140,7 +140,7 @@ const Settings = () => {
             onChange={(e) => numberHandler(e, "timerField")}
             type="number"
             min="1"
-            max="60"
+            max="180"
             value={inputTimerSeconds}
             onKeyDown={(e) =>
               ["e", "E", "+", "-", ".", ","].includes(e.key) &&
