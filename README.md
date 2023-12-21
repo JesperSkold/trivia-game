@@ -13,7 +13,7 @@ This trivia web application utilizes the Open Trivia DB API and leverages respon
 
 ![image](https://github.com/JesperSkold/trivia-game/assets/89381381/c49733b2-6c11-4049-85cb-1a6df8247e11)
 
-![image](https://github.com/JesperSkold/trivia-game/assets/89381381/cabbbf78-6805-4e64-8237-1f5ff33945b1)
+![image](https://github.com/JesperSkold/trivia-game/assets/89381381/ad77fce2-b1a6-432a-b374-f8a3a8123fde)
 
 ![image](https://github.com/JesperSkold/trivia-game/assets/89381381/406405fd-9383-493a-bd3a-d9519cf91f03)
 
