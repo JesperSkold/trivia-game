@@ -101,12 +101,7 @@ const initialState: InitState = {
   multiCategoryTitle: [],
 
   currentCategory: { name: "", id: 0 },
-  categoryQuestionCount: {
-    total_question_count: 0,
-    total_easy_question_count: 0,
-    total_medium_question_count: 0,
-    total_hard_question_count: 0,
-  },
+  categoryQuestionCount: {},
   difficulty: "random",
   nQuestions: "5",
   type: "random",
@@ -234,7 +229,6 @@ export const gameSlice = createSlice({
         cat.name.slice(0, cat.name.indexOf(":"))
       )
       state.multiCategoryTitle = [...new Set(category)]
-
       state.loadingCategories = "succeeded"
     })
 
@@ -255,7 +249,10 @@ export const gameSlice = createSlice({
     })
 
     builder.addCase(fetchCategoryQuestionCount.fulfilled, (state, action) => {
-      state.categoryQuestionCount = action.payload.category_question_count
+      state.categoryQuestionCount = {
+        ...state.categoryQuestionCount,
+        [action.payload.category_id]: action.payload.category_question_count,
+      }
       state.loadingCategoryCount = "succeeded"
     })
 

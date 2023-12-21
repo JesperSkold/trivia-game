@@ -32,7 +32,9 @@ const Settings = () => {
     useState<string>(timerSeconds)
 
   useEffect(() => {
-    dispatch(fetchCategoryQuestionCount(currentCategory.id))
+      if (!categoryQuestionCount[currentCategory.id]) {
+        dispatch(fetchCategoryQuestionCount(currentCategory.id))
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -72,18 +74,19 @@ const Settings = () => {
           <Loader />
         </div>
       ) : (
+        categoryQuestionCount[currentCategory.id] &&
         <div className={styles.categoryMeta}>
           <h2>{currentCategory.name}</h2>
-          <h3>Total Questions: {categoryQuestionCount.total_question_count}</h3>
+          <h3>Total Questions: {categoryQuestionCount[currentCategory.id].total_question_count}</h3>
           <p>
-            Easy Questions: {categoryQuestionCount.total_easy_question_count}
+            Easy Questions: {categoryQuestionCount[currentCategory.id].total_easy_question_count}
           </p>
           <p>
             Medium Questions:{" "}
-            {categoryQuestionCount.total_medium_question_count}
+            {categoryQuestionCount[currentCategory.id].total_medium_question_count}
           </p>
           <p>
-            Hard Questions: {categoryQuestionCount.total_hard_question_count}
+            Hard Questions: {categoryQuestionCount[currentCategory.id].total_hard_question_count}
           </p>
         </div>
       )}
