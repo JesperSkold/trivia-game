@@ -43,7 +43,7 @@ const GameRecap = ({ DEFAULT_TIMER, restartGame }: Props) => {
     )
     // eslint-disable-next-line
   }, [])
-  
+
   return (
     <main className={styles.gameRecap}>
       <h1>

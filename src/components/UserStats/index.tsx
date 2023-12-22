@@ -68,7 +68,15 @@ const UserStats = () => {
                   of the time
                 </p>
               )}
-              <button onClick={() => {localStorage.clear(); setCorrectAnswers(0); setWrongAnswers(0)}}>Reset Stats</button>
+              <button
+                onClick={() => {
+                  localStorage.clear()
+                  setCorrectAnswers(0)
+                  setWrongAnswers(0)
+                }}
+              >
+                Reset Stats
+              </button>
             </div>
           ) : (
             <div
@@ -85,7 +93,9 @@ const UserStats = () => {
             className={styles.closeBtn}
             onClick={() => dispatch(setShowStats(true))}
           />
-          <p className={styles.noStatsInfo}>After you play a game, your stats will appear here!</p>
+          <p className={styles.noStatsInfo}>
+            After you play a game, your stats will appear here!
+          </p>
         </div>
       ) : (
         <div

@@ -240,10 +240,7 @@ const Game = () => {
         )}
       </div>
       {showRecap && (
-        <GameRecap
-          restartGame={restartGame}
-          DEFAULT_TIMER={DEFAULT_TIMER}
-        />
+        <GameRecap restartGame={restartGame} DEFAULT_TIMER={DEFAULT_TIMER} />
       )}
     </>
   )
