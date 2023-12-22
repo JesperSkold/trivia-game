@@ -78,11 +78,11 @@
       }
 
       .correctAnswer {
-        color: rgba(9, 207, 9, 0.9);
+        color: var(--positive-color);
       }
 
       .wrongAnswer {
-        color: rgb(170, 6, 6);
+        color: var(--negative-color)
       }
     }
   }

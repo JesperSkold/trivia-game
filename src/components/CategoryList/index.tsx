@@ -6,6 +6,7 @@ import { TriviaCategory } from "../../interface/category"
 import Category from "../Category"
 import Loader from "../Loader"
 import styles from "./style.module.scss"
+import UserStats from "../UserStats"
 
 const CategoryList = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -78,6 +79,7 @@ const CategoryList = () => {
           </section>
         </>
       )}
+      <UserStats />
     </main>
   )
 }

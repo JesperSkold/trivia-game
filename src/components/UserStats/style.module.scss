@@ -1,0 +1,62 @@
+.userStats {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: var(--tertiary-color);
+  padding: 8px;
+  border-top-right-radius: 16px;
+  border: 1px solid #333333;
+  width: 200px;
+
+  button {
+    height: 30px;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 20px;
+    color: #333333;
+    cursor: pointer;
+  }
+
+  .badScore {
+    color: var(--negative-color);
+  }
+
+  .goodScore {
+    color: var(--positive-color);
+  }
+
+  .noStatsInfo {
+    margin: 16px 8px;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  h2,
+  p {
+    color: #333333;
+  }
+}
+
+.userStatsMinified {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: var(--tertiary-color);
+  padding: 8px;
+  border-top-right-radius: 16px;
+  border: 1px solid #333333;
+  cursor: pointer;
+  
+  p {
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    color: #333333;
+    margin: 0;
+  }
+}

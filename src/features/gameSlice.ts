@@ -80,6 +80,7 @@ interface InitState {
   timesUp: boolean
   step: number
   showRecap: boolean
+  showStats: boolean
 
   currentGame: IGame[]
   nRightAnswers: number
@@ -110,6 +111,7 @@ const initialState: InitState = {
   timesUp: false,
   step: 0,
   showRecap: false,
+  showStats: true,
 
   currentGame: [],
   nRightAnswers: 0,
@@ -165,6 +167,9 @@ export const gameSlice = createSlice({
     },
     setShowRecap: (state, action) => {
       state.showRecap = action.payload
+    },
+    setShowStats: (state, action) => {
+      state.showStats = action.payload
     },
     resetStep: (state) => {
       state.step = 0
@@ -278,6 +283,7 @@ export const {
   setNRightAnswers,
   setNWrongAnswers,
   setShowRecap,
+  setShowStats,
   resetStep,
   goBack,
   addToGameRecapAnswers,

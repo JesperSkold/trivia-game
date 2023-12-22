@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { useWindowSize } from "usehooks-ts"
@@ -9,18 +9,18 @@ import styles from "./style.module.scss"
 import { resetStep } from "../../features/gameSlice"
 
 interface Props {
-  nWrongAnswers: number
   DEFAULT_TIMER: number
   restartGame: () => void
 }
 
-const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
+const GameRecap = ({ DEFAULT_TIMER, restartGame }: Props) => {
   const {
     currentGame,
     currentCategory,
     loadingCustomGame,
     loadingQuickGame,
     nRightAnswers,
+    nWrongAnswers,
     timer,
     timerSeconds,
     gameRecapAnswers,
@@ -28,6 +28,22 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
   const { width, height } = useWindowSize()
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    localStorage.setItem(
+      "correctAnswers",
+      JSON.stringify(
+        Number(localStorage.getItem("correctAnswers") || 0) + nRightAnswers
+      )
+    )
+    localStorage.setItem(
+      "wrongAnswers",
+      JSON.stringify(
+        Number(localStorage.getItem("wrongAnswers") || 0) + nWrongAnswers
+      )
+    )
+    // eslint-disable-next-line
+  }, [])
+  
   return (
     <main className={styles.gameRecap}>
       <h1>
@@ -50,7 +66,7 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
       <div className={styles.buttonContainer}>
         {loadingCustomGame === "pending" || loadingQuickGame === "pending" ? (
           <div className={styles.loaderContainer}>
-          <Loader />
+            <Loader />
           </div>
         ) : (
           <button
@@ -62,7 +78,7 @@ const GameRecap = ({ nWrongAnswers, DEFAULT_TIMER, restartGame }: Props) => {
           </button>
         )}
         <button onClick={() => dispatch(resetStep())}>
-          Change Category and Settings
+          Back to Categories
         </button>
       </div>
       <h2>Answers:</h2>

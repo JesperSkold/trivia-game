@@ -241,7 +241,6 @@ const Game = () => {
       </div>
       {showRecap && (
         <GameRecap
-          nWrongAnswers={nWrongAnswers}
           restartGame={restartGame}
           DEFAULT_TIMER={DEFAULT_TIMER}
         />
